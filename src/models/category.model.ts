@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
 
 export default class Category{
-    categoryId: ObjectId;
+    categoryId: ObjectId | undefined;
     categoryName: string;
-    categoryImage: string;
+    categoryImage: string | undefined;
     createdAt: Date;
     updatedAt: Date;
 

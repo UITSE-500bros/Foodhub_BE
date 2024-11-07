@@ -3,7 +3,7 @@ import {categoryController} from "~/controllers";
 
 const categoryRouter = Router();
 categoryRouter.get("/", categoryController.getAllCategories);
-categoryRouter.post("/", );
+categoryRouter.post("/", categoryController.createCategory);
 categoryRouter.put("/", );
 categoryRouter.delete("/", );
 
