@@ -13,7 +13,7 @@ class OrderService {
     }
   }
 
-  async getOrderById(id: string) {
+  async getOrderDetailById(id: string) {
     try {
       const ordersCollection = await mongoService.getCollection('Orders');
       return await ordersCollection.findOne({ _id: new ObjectId(id) });
@@ -56,3 +56,4 @@ class OrderService {
     }
   }
 }
+export default new OrderService();
