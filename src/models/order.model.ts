@@ -16,3 +16,4 @@ class Order {
         this.updatedAt = updatedAt;
     }
 }
+export default Order;
