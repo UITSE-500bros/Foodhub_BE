@@ -23,6 +23,44 @@ class OrderService {
     }
   }
 
+  async trackOrder(id: string) {
+    try {
+      const ordersCollection = await mongoService.getCollection('Orders');
+      return await ordersCollection.findOne({ _id: new ObjectId(id) });
+    } catch (error) {
+      console.error('Error tracking order:', error);
+      throw error;
+    }
+  }
+
+  async checkIsUpdatable (id: string) {
+    try {
+      const ordersCollection = await mongoService.getCollection('Orders');
+      const order = await ordersCollection.findOne({ _id: new ObjectId(id) });
+      if (!order) {
+        return false;
+      }
+
+      if(order.status !== 'PENDING') {
+        return false;
+      }
+
+      const currentDate = new Date();
+      const orderDate = new Date(order.createdAt);
+      const diff = currentDate.getTime() - orderDate.getTime();
+      
+      const diffInMinutes = diff / (1000 * 60);
+      if (diffInMinutes > 30) {
+        return false;
+      }
+      return true;
+
+    } catch (error) {
+      console.error('Error checking if order is updatable:', error);
+      throw error;
+    }
+  }
+
   async createOrder(order: Order) {
     try {
       const ordersCollection = await mongoService.getCollection('Orders');
