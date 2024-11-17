@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { orderStatus,paymentMethod } from "~/utils";
 class Order {
-    orderId: ObjectId | null;
+    orderId?: ObjectId | null;
     userId: ObjectId;
     products: { productId: ObjectId, productName: string, productImage: string, productPrice: number, quantity: number }[];
     totalPrice: number;
@@ -16,11 +16,11 @@ class Order {
         products: { productId: ObjectId, productName: string, productImage: string, productPrice: number, quantity: number }[], 
         totalPrice: number,
         address: string,
-        orderStatus: orderStatus, 
+        orderStatus: orderStatus | orderStatus.pending, 
         paymentMethod: paymentMethod,
         createdAt: Date, 
         updatedAt: Date,
-        orderId: ObjectId | null = null // Default value for orderId is null
+        orderId: ObjectId | null = null 
     ) {
         this.orderId = orderId;
         this.userId = userId;
@@ -31,6 +31,7 @@ class Order {
         this.paymentMethod = paymentMethod;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+
     }
 }
 
