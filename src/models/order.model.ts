@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { orderStatus,paymentMethod } from "~/utils";
+import { orderStatus,paymentMethod } from "../utils";
 class Order {
     orderId?: ObjectId | null;
     userId: ObjectId;

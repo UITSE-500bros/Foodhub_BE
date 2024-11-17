@@ -10,8 +10,8 @@ dotenv.config()
 app.use(json())
 app.use(cors())
 
+mongoService.connectToDatabase();
 app.get('/', (req: Request, res: Response) => {
-  mongoService.connectToDatabase();
   res.send('Hello World!')
 })
 
