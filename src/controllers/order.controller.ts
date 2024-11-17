@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { orderService } from '../services';
-import { Order } from '~/models';
-import { orderStatus } from '~/utils';
+import { Order } from '../models';
+import { orderStatus } from '../utils';
 
 class orderController{
     async createOrder(req: Request, res: Response){
@@ -81,9 +81,9 @@ class orderController{
             }
             
             const order = await orderService.updateOrder(orderId, req.body);
-            res.status(200).json(order);
+            return res.status(200).json(order);
         }catch(error){
-            res.status(400).json({ message: 'Error updating order' });
+            return res.status(400).json({ message: 'Error updating order' });
         }
     }
     async getOrdersByUserID(req: Request, res: Response){

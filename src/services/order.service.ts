@@ -1,4 +1,4 @@
-import { Order } from '~/models';
+import { Order } from '../models';
 import mongoService from './mongo.service';
 import { ObjectId } from 'mongodb';
 

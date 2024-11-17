@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import {userService} from '~/services';
+import {userService} from '../services';
 
 class userController {
     async getUserByEmailPassword(req: Request, res: Response) {

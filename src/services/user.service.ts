@@ -1,4 +1,4 @@
-import { User } from "~/models";
+import { User } from "../models";
 import mongoService from "./mongo.service";
 import { ObjectId } from "mongodb";
 

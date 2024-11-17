@@ -1,4 +1,4 @@
-import { Category } from "~/models";
+import { Category } from "../models";
 import mongoService from "./mongo.service";
 
 class CategoryService {

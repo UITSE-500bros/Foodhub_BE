@@ -1,18 +1,48 @@
 {
   "compilerOptions": {
-    "baseUrl": "./", // Base directory for resolving paths
-    "paths": {
-      "~/*": ["src/*"] // Alias `~` to point to `src/`
-    },
-    "outDir": "./dist", // Compiled output directory
-    "rootDir": "./src", // Root source directory
-    "module": "commonjs", // Or "esnext" if using ESM
-    "moduleResolution": "node",
     "target": "es6",
+    "module": "commonjs",
+    "pretty": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "importHelpers": true,
     "strict": true,
-    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es5",
+      "es6",
+      "dom",
+      "es2015.core",
+      "es2015.collection",
+      "es2015.generator",
+      "es2015.iterable",
+      "es2015.promise",
+      "es2015.proxy",
+      "es2015.reflect",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "esnext.asynciterable"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

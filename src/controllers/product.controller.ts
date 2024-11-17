@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import {productService} from '../services';
 
-class productController {
+class ProductController {
     async getProducts(req:Request, res:Response) {
         try{
             const result = await productService.getProducts();
@@ -30,4 +30,5 @@ class productController {
         }
     }
 }
-export default new productController();
+const productController = new ProductController();
+export default productController;
