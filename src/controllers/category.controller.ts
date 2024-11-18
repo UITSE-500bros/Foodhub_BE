@@ -22,6 +22,7 @@ class categoryController {
             res.status(500).json({message: 'Error creating product'});
         }
     }
+
 }
 
 export default new categoryController();

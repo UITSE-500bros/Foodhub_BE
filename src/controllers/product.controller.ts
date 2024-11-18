@@ -11,7 +11,7 @@ class ProductController {
             res.status(500).json({message: 'Error getting products'});
         }
     }
-    async getProductById(req:Request, res:Response) {
+    async getProductDetailById(req:Request, res:Response) {
         try{
             const result = await productService.getProductById(req.params.id);
             res.status(200).json(result);
@@ -22,7 +22,8 @@ class ProductController {
     }
     async getProductByCategory(req:Request, res:Response) {
         try{
-            const result = await productService.getProductByCategory(req.params.category);
+            const id = req.query.id as string;
+            const result = await productService.getProductByCategory(id);
             res.status(200).json(result);
         } catch (error) {
             console.error('Error getting product by category', error);

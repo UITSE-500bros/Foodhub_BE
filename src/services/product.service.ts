@@ -24,7 +24,7 @@ class ProductService {
   async getProductByCategory(id: string) {
     try {
       const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      return await productsCollection.find({category: id}).toArray();
+      return await productsCollection.find({product_type: id}).toArray();
     } catch (error) {
         console.error('Error getting products:', error);
         throw error;
