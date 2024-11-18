@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import mongoService from './services/mongo.service'
 import router from './routes'
 const app: Express = express()
-const PORT: number = 8000
+const PORT = process.env.PORT || 3000;
 
 dotenv.config()
 app.use(json())
