@@ -1,5 +1,5 @@
 import mongoService from './mongo.service';
-class cartService {
+class CartService {
     async createCartByUserID(userId: string) {
         const cartCollection = await mongoService.getCollection('Cart');
         const cart = {
@@ -21,4 +21,5 @@ class cartService {
         return await cartCollection.updateOne({ userId: userId, 'products.productId': productId }, { $set: { 'products.$.quantity': quantity } });
     }
 }
-export default new cartService();
+const cartservice = new CartService();
+export default cartservice;

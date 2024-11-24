@@ -14,7 +14,7 @@ let db: any;
 let lastConnectionTime: number | null = null;
 const CONNECTION_TIMEOUT = 60 * 60 * 1000;
 
-class mongoService {
+class MongoService {
     async connectToDatabase() {
       const currentTime = Date.now();
   
@@ -48,4 +48,5 @@ class mongoService {
       return db.collection(collectionName);
     }
 }
-export default new mongoService();
+const mongoService = new MongoService();
+export default mongoService;

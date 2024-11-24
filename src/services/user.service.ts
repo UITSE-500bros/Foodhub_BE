@@ -2,7 +2,7 @@ import { User } from "../models";
 import mongoService from "./mongo.service";
 import { ObjectId } from "mongodb";
 
-class userService {
+class UserService {
     async createUser(user: User) {
         // Create user logic here
         const usersCollection = await mongoService.getCollection('Users');
@@ -36,4 +36,5 @@ class userService {
     
 
 }
-export default new userService();
+const userService = new UserService();
+export default userService;
