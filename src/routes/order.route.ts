@@ -3,11 +3,9 @@ import { orderController } from "../controllers";
 
 const orderRouter = Router();
 
-
 orderRouter.get('/:orderId', orderController.getOrderDetail);
 orderRouter.get('/track/:orderId', orderController.trackOrder);
 
 orderRouter.put('/:orderId', orderController.updateOrder);
 orderRouter.get('/user/:userId', orderController.getOrdersByUserID);
-
 export default orderRouter;

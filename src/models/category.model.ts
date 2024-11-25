@@ -1,16 +1,13 @@
-import { ObjectId } from "mongodb";
 
-export default class Category{
-    categoryId: ObjectId | undefined;
+export default class Category {
     categoryName: string;
-    categoryImage: string | undefined;
+    categoryImage: string | null;
     createdAt: Date;
     updatedAt: Date;
 
-    constructor(categoryId: ObjectId, categoryName: string, categoryImage: string, createdAt: Date, updatedAt: Date) {
-        this.categoryId = categoryId;
+    constructor(categoryName: string, categoryImage: string | null, createdAt: Date, updatedAt: Date) {
         this.categoryName = categoryName;
-        this.categoryImage = categoryImage;
+        this.categoryImage = categoryImage || null;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

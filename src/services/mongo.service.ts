@@ -19,7 +19,6 @@ class MongoService {
       const currentTime = Date.now();
   
       if (db && lastConnectionTime && (currentTime - lastConnectionTime < CONNECTION_TIMEOUT)) {
-          console.log('Using existing database connection');
           return db;
       }
     
@@ -32,7 +31,6 @@ class MongoService {
           console.error('Could not connect to database', error);
           throw error;
       }
-    
       return db;
     };
     async disconnectDatabase() {
@@ -40,9 +38,7 @@ class MongoService {
         await client.close();
         console.log('Disconnected from MongoDB');
        }
-
     }
-
     async getCollection(collectionName: string) {
       await this.connectToDatabase();
       return db.collection(collectionName);

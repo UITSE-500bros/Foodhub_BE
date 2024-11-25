@@ -1,25 +1,34 @@
 import { Request, Response } from 'express';
+import { Category } from '../models';
 import { categoryService } from '../services';
-import { ObjectId } from 'mongodb';
 
 class categoryController {
-    async getAllCategories(req:Request, res:Response) {
+    async getAllCategories(req: Request, res: Response) {
         try {
             const categories = await categoryService.getAllCategories();
             res.status(200).json(categories);
         } catch (error) {
-            res.status(500).json({message: 'Error getting products'});
+            res.status(500).json({ message: 'Error getting products' });
         }
     }
-    async createCategory(req:Request, res:Response) {
+    async createCategory(req: Request, res: Response) {
         try {
-            const {categoryName, categoryImage} = req.body;
+
+            const { categoryName } = req.body;
+
+            if (!categoryName) {
+                return res.status(400).json({ message: 'Category name is required' });
+            }
+            if (await categoryService.getCategoryByName(categoryName)) {
+                return res.status(400).json({ message: 'Category name already exists' });
+            }
+
             const date = new Date();
-            const newCategory = {categoryId: new ObjectId(), categoryName, categoryImage, createdAt: date, updatedAt: date};
-            const category = await categoryService.createCategory(newCategory);
-            res.status(201).json(category);
+            const newCategory = new Category(categoryName, null, date, date);
+            await categoryService.createCategory(newCategory);
+            return res.status(200).json({ message: 'Category created successfully' });
         } catch (error) {
-            res.status(500).json({message: 'Error creating product'});
+            return res.status(500).json({ message: 'Error creating category' });
         }
     }
 

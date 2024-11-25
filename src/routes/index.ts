@@ -7,10 +7,10 @@ import cartRouter from "./cart.route";
 
 const router = Router();
 
-router.use('/api/products', productRouter);
-router.use('/api/categories', categoryRouter);
-router.use('/api/users', userRouter);
-router.use('/api/orders', orderRouter);
+router.use('/api/product', productRouter);
+router.use('/api/category', categoryRouter);
+router.use('/api/user', userRouter);
+router.use('/api/order', orderRouter);
 router.use('/api/cart', cartRouter);
 
 export default router;

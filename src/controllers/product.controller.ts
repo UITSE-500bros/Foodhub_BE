@@ -22,12 +22,23 @@ class ProductController {
     }
     async getProductByCategory(req:Request, res:Response) {
         try{
-            const id = req.query.id as string;
+            const {id} = req.params;
+            console.log('id', id);
             const result = await productService.getProductByCategory(id);
             res.status(200).json(result);
         } catch (error) {
             console.error('Error getting product by category', error);
             res.status(500).json({message: 'Error getting product by category'});
+        }
+    }
+    async updateProductType(req:Request, res:Response) {
+        try{
+
+            const result = await productService.updateProductType();
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Error updating product', error);
+            res.status(500).json({message: 'Error updating product'});
         }
     }
 }

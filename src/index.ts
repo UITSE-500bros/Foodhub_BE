@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, json } from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import mongoService from './services/mongo.service'
+import { mongoService } from './services'
 import router from './routes'
 const app: Express = express()
 const PORT = process.env.PORT || 8000;
