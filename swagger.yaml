@@ -1,0 +1,335 @@
+openapi: 3.0.0
+info:
+  description: |
+    This is foodhub server for SE121 project.
+  version: "1.0.0"
+  title: Foodhub APIs
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "https://se-foodhub-7fdf668fb550.herokuapp.com/api"
+tags:
+  - name: auth
+    description: Auth APIs
+  - name: product
+    description: Product APIs
+  - name: category
+    description: Category APIs
+  - name: user
+    description: User APIs
+  - name: order
+    description: Order APIs
+  - name: cart
+    description: Cart APIs
+paths:
+    /auth/login:
+        post:
+            tags:
+                - auth
+            summary: Login to the application
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: Email of the user
+                                    example: ""
+            responses:
+                '200':
+                    description: Successful login
+                '401':
+                    description: Unauthorized
+components:
+  schemas:
+    ObjectId:
+        type: string
+        description: A unique identifier in MongoDB (24-character hexadecimal string)
+        example: "60ad0aed9b1e8b9a2e8b9f4b"
+        
+    Product:
+        type: object
+        properties:
+            productId:
+              $ref: '#/components/schemas/ObjectId'
+            productName:
+              type: string
+              description: Name of the product
+              example: "Souvenir Mug"
+            productImage:
+              type: string
+              description: URL or path to the product image
+              example: "/images/mug.jpg"
+            productPrice:
+              type: number
+              format: float
+              description: Price of the product
+              example: 12.99
+            quantity:
+              type: integer
+              description: Quantity of the product in the cart
+              example: 2
+        required:
+            - productId
+            - productName
+            - productImage
+            - productPrice
+            - quantity
+    Cart:
+      type: object
+      properties:
+        cartId:
+          $ref: '#/components/schemas/ObjectId'
+        userId:
+          $ref: '#/components/schemas/ObjectId'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the cart was created
+          example: "2024-11-24T12:34:56.789Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the cart was last updated
+          example: "2024-11-25T12:34:56.789Z"
+      required:
+        - cartId
+        - userId
+        - products
+        - createdAt
+        - updatedAt
+    Category:
+      type: object
+      properties:
+        categoryId:
+          $ref: '#/components/schemas/ObjectId'
+          nullable: true
+          description: Unique identifier for the category (optional)
+        categoryName:
+          type: string
+          description: Name of the category
+          example: "Souvenirs"
+        categoryImage:
+          type: string
+          nullable: true
+          description: URL or path to the category image (optional)
+          example: "/images/souvenirs.jpg"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the category was created
+          example: "2024-11-24T12:34:56.789Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the category was last updated
+          example: "2024-11-25T12:34:56.789Z"
+      required:
+        - categoryName
+        - createdAt
+        - updatedAt
+    OrderProduct:
+      type: object
+      properties:
+        productId:
+          $ref: '#/components/schemas/ObjectId'
+        productName:
+          type: string
+          description: Name of the product
+          example: "Souvenir Mug"
+        productImage:
+          type: string
+          description: URL or path to the product image
+          example: "/images/mug.jpg"
+        productPrice:
+          type: number
+          format: float
+          description: Price of the product
+          example: 12.99
+        quantity:
+          type: integer
+          description: Quantity of the product in the order
+          example: 2
+      required:
+        - productId
+        - productName
+        - productImage
+        - productPrice
+        - quantity
+    Order:
+      type: object
+      properties:
+        orderId:
+          $ref: '#/components/schemas/ObjectId'
+          nullable: true
+          description: Unique identifier for the order (optional)
+        userId:
+          $ref: '#/components/schemas/ObjectId'
+          description: Identifier of the user placing the order
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProduct'
+        totalPrice:
+          type: number
+          format: float
+          description: Total price of the order
+          example: 150.50
+        orderStatus:
+          $ref: '#/components/schemas/OrderStatus'
+        address:
+          type: string
+          description: Shipping address for the order
+          example: "123 Main Street, Springfield"
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the order was created
+          example: "2024-11-24T12:34:56.789Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the order was last updated
+          example: "2024-11-25T12:34:56.789Z"
+      required:
+        - userId
+        - products
+        - totalPrice
+        - orderStatus
+        - address
+        - paymentMethod
+        - createdAt
+        - updatedAt
+    OrderStatus:
+      type: string
+      enum:
+        - pending
+        - processing
+        - completed
+        - cancelled
+      description: Current status of the order
+      example: "pending"
+
+    PaymentMethod:
+      type: string
+      enum:
+        - cash
+        - creditCard
+        - debitCard
+        - paypal
+        - googlePay
+        - applePay
+        - internetBanking
+        - vnPay
+        - momo
+        - zaloPay
+      description: Payment method used for the order
+      example: "creditCard"
+    User:
+      type: object
+      properties:
+        userId:
+          $ref: '#/components/schemas/ObjectId'
+          description: Unique identifier for the user
+        userName:
+          type: string
+          description: Name of the user
+          example: "John Doe"
+        userAvatar:
+          type: string
+          description: URL or path to the user's avatar image
+          example: "/images/avatar.jpg"
+        userEmail:
+          type: string
+          format: email
+          description: Email address of the user
+          example: "johndoe@example.com"
+        userPassword:
+          type: string
+          description: The user's password (optional for read operations)
+          example: "password123"
+          nullable: true
+        userPhone:
+          type: string
+          description: Phone number of the user
+          example: "+1234567890"
+        userAddress:
+          type: string
+          description: Shipping or billing address of the user
+          example: "123 Main Street, Springfield"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was created
+          example: "2024-11-24T12:34:56.789Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was last updated
+          example: "2024-11-25T12:34:56.789Z"
+        favouriteProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjectId'
+          description: A list of product IDs that the user has marked as favorites
+          nullable: true
+        forgetPasswordToken:
+          type: string
+          description: Token for password recovery
+          nullable: true
+          example: "random-token"
+        forgetPasswordTokenExpire:
+          type: string
+          format: date-time
+          description: Expiration date of the password recovery token
+          nullable: true
+          example: "2024-12-01T12:34:56.789Z"
+        verificationToken:
+          type: string
+          description: Token used for email verification
+          nullable: true
+          example: "verification-token"
+        verificationTokenExpire:
+          type: string
+          format: date-time
+          description: Expiration date of the email verification token
+          nullable: true
+          example: "2024-12-01T12:34:56.789Z"
+        verificationStatus:
+          type: boolean
+          description: Status of the user's email verification
+          example: true
+        refreshToken:
+          type: string
+          description: Refresh token for user authentication
+          nullable: true
+          example: "refresh-token"
+        refreshTokenExpire:
+          type: string
+          format: date-time
+          description: Expiration date of the refresh token
+          nullable: true
+          example: "2024-12-01T12:34:56.789Z"
+      required:
+        - userId
+        - userName
+        - userEmail
+        - userPhone
+        - userAddress
+        - createdAt
+        - updatedAt
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
