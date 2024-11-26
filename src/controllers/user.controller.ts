@@ -14,7 +14,7 @@ class userController {
             // const user = await userService.createUser(newUser);
             res.status(201).send("User created successfully");
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send((error as Error).message);
         }
     } 
     async updateInfo(req: Request, res: Response) {
