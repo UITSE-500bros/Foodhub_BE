@@ -3,6 +3,6 @@ import { userController } from "../controllers";
 
 const userRouter = Router();
 
-userRouter.post("/", userController.createUser);
+userRouter.post("/auth/google", userController.createUser);
 
 export default userRouter;

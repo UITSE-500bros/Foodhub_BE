@@ -20,8 +20,9 @@ class UserService {
     async createUser(user: User) {
         // Create user logic here
         const usersCollection = await mongoService.getCollection('Users');
-        const result = await usersCollection.insertOne(user);
-        return result.ops[0];
+        await usersCollection.insertOne(user);
+
+        return {...user};
     }
 }
 const userService = new UserService();
