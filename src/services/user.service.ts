@@ -16,6 +16,13 @@ class UserService {
         const result = await usersCollection.updateOne({ _id: new ObjectId(id) }, { $set: user });
         return result.modifiedCount;
     }
+
+    async createUser(user: User) {
+        // Create user logic here
+        const usersCollection = await mongoService.getCollection('Users');
+        const result = await usersCollection.insertOne(user);
+        return result.ops[0];
+    }
 }
 const userService = new UserService();
 export default userService;

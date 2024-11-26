@@ -1,38 +1,76 @@
 import { ObjectId } from "mongodb";
- class User {
+
+class User {
     userId: ObjectId;
     userName: string;
     userAvatar: string;
     userEmail: string;
-    userPassword: string | undefined;
-    userPhone: string;
+    userPassword?: string;
+    userPhone?: string;
     userAddress: string;
     createdAt: Date;
     updatedAt: Date;
 
-    favouriteProducts: ObjectId[] | null = null;
-
+    favouriteProducts?: ObjectId[] = [];
+    
     // for jwt
-    forgetPasswordToken: string | undefined;
-    forgetPasswordTokenExpire: Date | undefined;
+    forgetPasswordToken?: string;
+    forgetPasswordTokenExpire?: Date;
 
-    verificationToken: string | undefined;
-    verificationTokenExpire: Date | undefined;
-    verificationStatus: boolean | undefined;
+    verificationToken?: string;
+    verificationTokenExpire?: Date;
+    verificationStatus?: boolean = false;
 
-    refreshToken: string | undefined;
-    refreshTokenExpire: Date | undefined;
+    refreshToken?: string;
+    refreshTokenExpire?: Date;
 
-    constructor(userId: ObjectId, userName: string, userAvatar: string, userEmail: string, userPassword: string | undefined, userPhone: string, userAddress: string, createdAt: Date, updatedAt: Date, forgetPasswordToken: string | undefined, forgetPasswordTokenExpire: Date | undefined, verificationToken: string | undefined, verificationTokenExpire: Date | undefined, verificationStatus: boolean | undefined, refreshToken: string | undefined, refreshTokenExpire: Date | undefined) {
-        this.userId = userId;
-        this.userName = userName;
-        this.userAvatar = userAvatar;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userPhone = userPhone;
-        this.userAddress = userAddress;
+    constructor({
+        id,
+        name,
+        email,
+        picture,
+        password,
+        phone,
+        address,
+        createdAt = new Date(),
+        updatedAt = new Date(),
+        favouriteProducts = [],
+        forgetPasswordToken,
+        forgetPasswordTokenExpire,
+        verificationToken,
+        verificationTokenExpire,
+        verificationStatus = false,
+        refreshToken,
+        refreshTokenExpire,
+    }: {
+        id: string;
+        name: string;
+        email: string;
+        picture: string;
+        password?: string;
+        phone?: string;
+        address?: string;
+        createdAt?: Date;
+        updatedAt?: Date;
+        favouriteProducts?: ObjectId[];
+        forgetPasswordToken?: string;
+        forgetPasswordTokenExpire?: Date;
+        verificationToken?: string;
+        verificationTokenExpire?: Date;
+        verificationStatus?: boolean;
+        refreshToken?: string;
+        refreshTokenExpire?: Date;
+    }) {
+        this.userId = new ObjectId(id);
+        this.userName = name;
+        this.userAvatar = picture;
+        this.userEmail = email;
+        this.userPassword = password;
+        this.userPhone = phone;
+        this.userAddress = address || "Not provided"; // Default if no address is provided
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.favouriteProducts = favouriteProducts;
         this.forgetPasswordToken = forgetPasswordToken;
         this.forgetPasswordTokenExpire = forgetPasswordTokenExpire;
         this.verificationToken = verificationToken;
@@ -42,4 +80,5 @@ import { ObjectId } from "mongodb";
         this.refreshTokenExpire = refreshTokenExpire;
     }
 }
+
 export default User;
