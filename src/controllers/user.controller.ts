@@ -5,8 +5,8 @@ import { User } from '../models';
 class userController {
     async createUser(req: Request, res: Response) {
         try {
-            const {id, name, email, picture} = req.body;
-            if (!id || !name || !email || !picture) {
+            const {email, family_name,given_name,id,name,picture,verified_email} = req.body;
+            if (!id || !name || !email || !picture || !family_name || !given_name || !verified_email) {
                 throw new Error('Missing required fields: id, name, email');
             }
             const newUser = new User({ id, name, email, picture });
