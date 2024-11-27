@@ -30,7 +30,7 @@ class ProductService {
   async getProductById(id: string) {
     try {
       const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      return await productsCollection.findOne({ productId: id });
+      return await productsCollection.findOne({ productId: new ObjectId(id) });
     } catch (error) {
       console.error('Error getting product by id:', error);
       throw error;
@@ -40,7 +40,6 @@ class ProductService {
     try {
       const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
       const result = await productsCollection.find({ productType: new ObjectId(id) }).toArray();
-      console.log('result', result);
       return result;
     } catch (error) {
       console.error('Error getting products:', error);
