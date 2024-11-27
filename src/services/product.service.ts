@@ -30,7 +30,7 @@ class ProductService {
   async getProductById(id: string) {
     try {
       const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      return await productsCollection.findOne({ productId: new ObjectId(id) });
+      return await productsCollection.findOne({ _id: new ObjectId(id) });
     } catch (error) {
       console.error('Error getting product by id:', error);
       throw error;
