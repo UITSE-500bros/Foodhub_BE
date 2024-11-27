@@ -23,73 +23,177 @@ tags:
   - name: cart
     description: Cart APIs
 paths:
-    /auth/login:
-        post:
-            tags:
-                - auth
-            summary: Login to the application
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                    description: Email of the user
-                                    example: ""
-            responses:
-                '200':
-                    description: Successful login
-                '401':
-                    description: Unauthorized
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login to the application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Email of the user
+                  example: ""
+      responses:
+        "200":
+          description: Successful login
+        "401":
+          description: Unauthorized
+  /product:
+    get:
+      tags:
+        - product
+      summary: Get all products
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      tags:
+        - product
+      summary: Add a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /product/{productId}:
+    get:
+      tags:
+        - product
+      summary: Get a product by ID
+      parameters:
+        - name: productId
+          in: path
+          description: ID of the product to return
+          required: true
+          schema:
+            $ref: "#/components/schemas/ObjectId"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+  /product/category/{categoryId}:
+    get:
+      tags:
+        - product
+      summary: Get all products in a category
+      parameters:
+        - name: categoryId
+          in: path
+          description: ID of the category to return products from
+          required: true
+          schema:
+            $ref: "#/components/schemas/ObjectId"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "404":
+          description: Category not found
+  /category:
+    get:
+      tags:
+        - category
+      summary: Get all categories
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      tags:
+        - category
+      summary: Add a new category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  
+
 components:
   schemas:
     ObjectId:
-        type: string
-        description: A unique identifier in MongoDB (24-character hexadecimal string)
-        example: "60ad0aed9b1e8b9a2e8b9f4b"
-        
+      type: string
+      description: A unique identifier in MongoDB (24-character hexadecimal string)
+      example: "60ad0aed9b1e8b9a2e8b9f4b"
+
     Product:
-        type: object
-        properties:
-            productId:
-              $ref: '#/components/schemas/ObjectId'
-            productName:
-              type: string
-              description: Name of the product
-              example: "Souvenir Mug"
-            productImage:
-              type: string
-              description: URL or path to the product image
-              example: "/images/mug.jpg"
-            productPrice:
-              type: number
-              format: float
-              description: Price of the product
-              example: 12.99
-            quantity:
-              type: integer
-              description: Quantity of the product in the cart
-              example: 2
-        required:
-            - productId
-            - productName
-            - productImage
-            - productPrice
-            - quantity
+      type: object
+      properties:
+        productId:
+          $ref: "#/components/schemas/ObjectId"
+        productName:
+          type: string
+          description: Name of the product
+          example: "Souvenir Mug"
+        productImage:
+          type: string
+          description: URL or path to the product image
+          example: "/images/mug.jpg"
+        productPrice:
+          type: number
+          format: float
+          description: Price of the product
+          example: 12.99
+        quantity:
+          type: integer
+          description: Quantity of the product in the cart
+          example: 2
+      required:
+        - productId
+        - productName
+        - productImage
+        - productPrice
+        - quantity
     Cart:
       type: object
       properties:
         cartId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
         userId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
         products:
           type: array
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
         createdAt:
           type: string
           format: date-time
@@ -110,7 +214,7 @@ components:
       type: object
       properties:
         categoryId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
           nullable: true
           description: Unique identifier for the category (optional)
         categoryName:
@@ -140,7 +244,7 @@ components:
       type: object
       properties:
         productId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
         productName:
           type: string
           description: Name of the product
@@ -168,29 +272,29 @@ components:
       type: object
       properties:
         orderId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
           nullable: true
           description: Unique identifier for the order (optional)
         userId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
           description: Identifier of the user placing the order
         products:
           type: array
           items:
-            $ref: '#/components/schemas/OrderProduct'
+            $ref: "#/components/schemas/OrderProduct"
         totalPrice:
           type: number
           format: float
           description: Total price of the order
           example: 150.50
         orderStatus:
-          $ref: '#/components/schemas/OrderStatus'
+          $ref: "#/components/schemas/OrderStatus"
         address:
           type: string
           description: Shipping address for the order
           example: "123 Main Street, Springfield"
         paymentMethod:
-          $ref: '#/components/schemas/PaymentMethod'
+          $ref: "#/components/schemas/PaymentMethod"
         createdAt:
           type: string
           format: date-time
@@ -239,7 +343,7 @@ components:
       type: object
       properties:
         userId:
-          $ref: '#/components/schemas/ObjectId'
+          $ref: "#/components/schemas/ObjectId"
           description: Unique identifier for the user
         userName:
           type: string
@@ -280,7 +384,7 @@ components:
         favouriteProducts:
           type: array
           items:
-            $ref: '#/components/schemas/ObjectId'
+            $ref: "#/components/schemas/ObjectId"
           description: A list of product IDs that the user has marked as favorites
           nullable: true
         forgetPasswordToken:
