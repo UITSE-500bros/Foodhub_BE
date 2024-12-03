@@ -16,8 +16,6 @@ class User {
     userGGId?: string = "Not provided";
     userMetaId?: string = "Not provided";
     
-
-
     constructor({
         name,
         email,

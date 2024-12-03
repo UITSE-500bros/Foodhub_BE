@@ -2,13 +2,13 @@ openapi: 3.0.0
 info:
   description: |
     This is foodhub server for SE121 project.
-  version: "1.0.0"
+  version: '1.0.0'
   title: Foodhub APIs
   license:
     name: Apache 2.0
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
-  - url: "https://se-foodhub-7fdf668fb550.herokuapp.com/api"
+  - url: 'https://se-foodhub-7fdf668fb550.herokuapp.com/api'
 tags:
   - name: auth
     description: Auth APIs
@@ -38,11 +38,11 @@ paths:
                 email:
                   type: string
                   description: Email of the user
-                  example: ""
+                  example: ''
       responses:
-        "200":
+        '200':
           description: Successful login
-        "401":
+        '401':
           description: Unauthorized
   /product:
     get:
@@ -50,14 +50,14 @@ paths:
         - product
       summary: Get all products
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Product"
+                  $ref: '#/components/schemas/Product'
     post:
       tags:
         - product
@@ -67,11 +67,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Product"
+              $ref: '#/components/schemas/Product'
       responses:
-        "200":
+        '200':
           description: Successful operation
-        "400":
+        '400':
           description: Invalid input
   /product/{productId}:
     get:
@@ -84,15 +84,15 @@ paths:
           description: ID of the product to return
           required: true
           schema:
-            $ref: "#/components/schemas/ObjectId"
+            $ref: '#/components/schemas/ObjectId'
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
-        "404":
+                $ref: '#/components/schemas/Product'
+        '404':
           description: Product not found
   /product/category/{categoryId}:
     get:
@@ -105,17 +105,17 @@ paths:
           description: ID of the category to return products from
           required: true
           schema:
-            $ref: "#/components/schemas/ObjectId"
+            $ref: '#/components/schemas/ObjectId'
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Product"
-        "404":
+                  $ref: '#/components/schemas/Product'
+        '404':
           description: Category not found
   /category:
     get:
@@ -123,14 +123,14 @@ paths:
         - category
       summary: Get all categories
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Category"
+                  $ref: '#/components/schemas/Category'
     post:
       tags:
         - category
@@ -140,34 +140,139 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Category"
+              $ref: '#/components/schemas/Category'
       responses:
-        "200":
+        '200':
           description: Successful operation
-        "400":
+        '400':
           description: Invalid input
-  
+  /order/cart/{cartId}:
+    post:
+      tags:
+        - order
+      summary: Place an order from a cart
+      parameters:
+        - name: cartId
+          in: path
+          description: ID of the cart to place an order from
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: Shipping address for the order
+                  example: '123 Main Street, Springfield'
+                paymentMethod:
+                  $ref: '#/components/schemas/PaymentMethod'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /order/payment:
+    post:
+      tags:
+        - order
+      summary: Create a payment intent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  format: float
+                  description: Total amount to be paid in the smallest currency unit (e.g., cents for USD).
+                  example: 15000
+                currency:
+                  type: string
+                  description: ISO 4217 currency code (e.g., USD, EUR).
+                  example: 'VND'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The unique identifier for the payment intent.
+                    example: pi_1FHEeBGjmzv0EFpSaE2TzCjU
+                  amount:
+                    type: number
+                    description: The amount in cents/pennies.
+                    example: 15050
+                  currency:
+                    type: string
+                    description: The three-letter ISO currency code.
+                    example: 'usd'
+                  status:
+                    type: string
+                    description: The status of the payment intent.
+                    example: 'succeeded'
+                  client_secret:
+                    type: string
+                    description: The client secret for completing the payment process.
+                    example: 'secret_abc123'
+        '400':
+          description: Invalid input or missing parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: Type of error.
+                        example: 'invalid_request_error'
+                      message:
+                        type: string
+                        description: Details of the error.
+                        example: 'Missing required param: amount.'
+                      param:
+                        type: string
+                        description: The parameter that caused the error.
+                        example: 'amount'
+                      doc_url:
+                        type: string
+                        description: URL to Stripe's documentation for the error.
+                        example: 'https://stripe.com/docs/error-codes/parameter-missing'
+
 
 components:
   schemas:
     ObjectId:
       type: string
       description: A unique identifier in MongoDB (24-character hexadecimal string)
-      example: "60ad0aed9b1e8b9a2e8b9f4b"
+      example: '60ad0aed9b1e8b9a2e8b9f4b'
 
     Product:
       type: object
       properties:
         productId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
         productName:
           type: string
           description: Name of the product
-          example: "Souvenir Mug"
+          example: 'Souvenir Mug'
         productImage:
           type: string
           description: URL or path to the product image
-          example: "/images/mug.jpg"
+          example: '/images/mug.jpg'
         productPrice:
           type: number
           format: float
@@ -187,23 +292,23 @@ components:
       type: object
       properties:
         cartId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
         userId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
         products:
           type: array
           items:
-            $ref: "#/components/schemas/Product"
+            $ref: '#/components/schemas/Product'
         createdAt:
           type: string
           format: date-time
           description: Timestamp when the cart was created
-          example: "2024-11-24T12:34:56.789Z"
+          example: '2024-11-24T12:34:56.789Z'
         updatedAt:
           type: string
           format: date-time
           description: Timestamp when the cart was last updated
-          example: "2024-11-25T12:34:56.789Z"
+          example: '2024-11-25T12:34:56.789Z'
       required:
         - cartId
         - userId
@@ -214,28 +319,28 @@ components:
       type: object
       properties:
         categoryId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
           nullable: true
           description: Unique identifier for the category (optional)
         categoryName:
           type: string
           description: Name of the category
-          example: "Souvenirs"
+          example: 'Souvenirs'
         categoryImage:
           type: string
           nullable: true
           description: URL or path to the category image (optional)
-          example: "/images/souvenirs.jpg"
+          example: '/images/souvenirs.jpg'
         createdAt:
           type: string
           format: date-time
           description: Timestamp when the category was created
-          example: "2024-11-24T12:34:56.789Z"
+          example: '2024-11-24T12:34:56.789Z'
         updatedAt:
           type: string
           format: date-time
           description: Timestamp when the category was last updated
-          example: "2024-11-25T12:34:56.789Z"
+          example: '2024-11-25T12:34:56.789Z'
       required:
         - categoryName
         - createdAt
@@ -244,15 +349,15 @@ components:
       type: object
       properties:
         productId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
         productName:
           type: string
           description: Name of the product
-          example: "Souvenir Mug"
+          example: 'Souvenir Mug'
         productImage:
           type: string
           description: URL or path to the product image
-          example: "/images/mug.jpg"
+          example: '/images/mug.jpg'
         productPrice:
           type: number
           format: float
@@ -272,39 +377,39 @@ components:
       type: object
       properties:
         orderId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
           nullable: true
           description: Unique identifier for the order (optional)
         userId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
           description: Identifier of the user placing the order
         products:
           type: array
           items:
-            $ref: "#/components/schemas/OrderProduct"
+            $ref: '#/components/schemas/OrderProduct'
         totalPrice:
           type: number
           format: float
           description: Total price of the order
           example: 150.50
         orderStatus:
-          $ref: "#/components/schemas/OrderStatus"
+          $ref: '#/components/schemas/OrderStatus'
         address:
           type: string
           description: Shipping address for the order
-          example: "123 Main Street, Springfield"
+          example: '123 Main Street, Springfield'
         paymentMethod:
-          $ref: "#/components/schemas/PaymentMethod"
+          $ref: '#/components/schemas/PaymentMethod'
         createdAt:
           type: string
           format: date-time
           description: Timestamp when the order was created
-          example: "2024-11-24T12:34:56.789Z"
+          example: '2024-11-24T12:34:56.789Z'
         updatedAt:
           type: string
           format: date-time
           description: Timestamp when the order was last updated
-          example: "2024-11-25T12:34:56.789Z"
+          example: '2024-11-25T12:34:56.789Z'
       required:
         - userId
         - products
@@ -322,7 +427,7 @@ components:
         - completed
         - cancelled
       description: Current status of the order
-      example: "pending"
+      example: 'pending'
 
     PaymentMethod:
       type: string
@@ -338,77 +443,77 @@ components:
         - momo
         - zaloPay
       description: Payment method used for the order
-      example: "creditCard"
+      example: 'creditCard'
     User:
       type: object
       properties:
         userId:
-          $ref: "#/components/schemas/ObjectId"
+          $ref: '#/components/schemas/ObjectId'
           description: Unique identifier for the user
         userName:
           type: string
           description: Name of the user
-          example: "John Doe"
+          example: 'John Doe'
         userAvatar:
           type: string
           description: URL or path to the user's avatar image
-          example: "/images/avatar.jpg"
+          example: '/images/avatar.jpg'
         userEmail:
           type: string
           format: email
           description: Email address of the user
-          example: "johndoe@example.com"
+          example: 'johndoe@example.com'
         userPassword:
           type: string
           description: The user's password (optional for read operations)
-          example: "password123"
+          example: 'password123'
           nullable: true
         userPhone:
           type: string
           description: Phone number of the user
-          example: "+1234567890"
+          example: '+1234567890'
         userAddress:
           type: string
           description: Shipping or billing address of the user
-          example: "123 Main Street, Springfield"
+          example: '123 Main Street, Springfield'
         createdAt:
           type: string
           format: date-time
           description: Timestamp when the user was created
-          example: "2024-11-24T12:34:56.789Z"
+          example: '2024-11-24T12:34:56.789Z'
         updatedAt:
           type: string
           format: date-time
           description: Timestamp when the user was last updated
-          example: "2024-11-25T12:34:56.789Z"
+          example: '2024-11-25T12:34:56.789Z'
         favouriteProducts:
           type: array
           items:
-            $ref: "#/components/schemas/ObjectId"
+            $ref: '#/components/schemas/ObjectId'
           description: A list of product IDs that the user has marked as favorites
           nullable: true
         forgetPasswordToken:
           type: string
           description: Token for password recovery
           nullable: true
-          example: "random-token"
+          example: 'random-token'
         forgetPasswordTokenExpire:
           type: string
           format: date-time
           description: Expiration date of the password recovery token
           nullable: true
-          example: "2024-12-01T12:34:56.789Z"
+          example: '2024-12-01T12:34:56.789Z'
         verificationToken:
           type: string
           description: Token used for email verification
           nullable: true
-          example: "verification-token"
+          example: 'verification-token'
         verificationTokenExpire:
           type: string
           format: date-time
           description: Expiration date of the email verification token
           nullable: true
-          example: "2024-12-01T12:34:56.789Z"
+          example: '2024-12-01T12:34:56.789Z'
         verificationStatus:
           type: boolean
           description: Status of the user's email verification
@@ -417,13 +522,13 @@ components:
           type: string
           description: Refresh token for user authentication
           nullable: true
-          example: "refresh-token"
+          example: 'refresh-token'
         refreshTokenExpire:
           type: string
           format: date-time
           description: Expiration date of the refresh token
           nullable: true
-          example: "2024-12-01T12:34:56.789Z"
+          example: '2024-12-01T12:34:56.789Z'
       required:
         - userId
         - userName
