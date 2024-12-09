@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { orderService } from '../services'
 import dotenv from 'dotenv'
+import Stripe from 'stripe'
 dotenv.config()
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+
 class orderController {
   async getOrderDetail(req: Request, res: Response) {
     try {
@@ -51,15 +52,29 @@ class orderController {
 
   async createPaymentIntent(req: Request, res: Response) {
     try {
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: req.body.amount,
-        currency: 'vnd',
-        automatic_payment_methods: {
-          enabled: true
-        }
-      })
+      const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+      const stripe = new Stripe(STRIPE_SECRET_KEY, {
+        apiVersion: '2024-11-20.acacia',
+        typescript: true
+      });
 
-      res.json({ paymentIntent: paymentIntent.client_secret })
+      const ephemeralKey = await stripe.ephemeralKeys.create(
+        { customer: "6756bb8272ae71c49a5f91f2"},
+        { apiVersion: '2024-11-20.acacia' }
+      );
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: 1099,
+        currency: 'vnd',
+        payment_method_types: ['card'],
+        customer: "6756bb8272ae71c49a5f91f2",
+      });
+
+      return res.status(200).json({ 
+        paymentIntent: paymentIntent.client_secret,
+        ephemeralKey: ephemeralKey.secret,
+        customer: "6756bb8272ae71c49a5f91f2"
+       });
     } catch (e) {
       res.status(400).json({
         error: e
