@@ -59,21 +59,21 @@ class orderController {
       });
 
       const ephemeralKey = await stripe.ephemeralKeys.create(
-        { customer: "6756bb8272ae71c49a5f91f2" },
+        { customer: process.env.CUSTOMER_ID },
         { apiVersion: '2024-11-20.acacia' }
       );
 
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: 1099,
+        amount: 1500000,
         currency: 'vnd',
         payment_method_types: ['card'],
-        customer: "6756bb8272ae71c49a5f91f2",
+        customer: process.env.CUSTOMER_ID,
       });
 
       return res.status(200).json({
         paymentIntent: paymentIntent.client_secret,
         ephemeralKey: ephemeralKey.secret,
-        customer: "6756bb8272ae71c49a5f91f2"
+        customer: process.env.CUSTOMER_ID
       });
     } catch (e) {
       return res.status(400).json({
