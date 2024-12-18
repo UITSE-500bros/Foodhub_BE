@@ -49,7 +49,7 @@ class orderController {
       res.status(400).json({ message: 'Error getting orders' })
     }
   }
-
+  // Card
   async createPaymentIntent(req: Request, res: Response) {
     try {
       const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
@@ -81,6 +81,7 @@ class orderController {
       });
     }
   }
+  
 }
 
 export default new orderController()

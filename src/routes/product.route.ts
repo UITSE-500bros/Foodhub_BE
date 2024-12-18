@@ -10,5 +10,5 @@ productRouter.get('/category/:id', productController.getProductByCategory);
 
 // productRouter.delete('/:id', productController.deleteProduct);
 // productRouter.post('/', productController.createProduct);
-// productRouter.put('/:id', productController.updateProduct);
+productRouter.put('/', productController.updateProductType);
 export default productRouter;

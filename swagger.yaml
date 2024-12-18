@@ -251,8 +251,53 @@ paths:
                         type: string
                         description: URL to Stripe's documentation for the error.
                         example: 'https://stripe.com/docs/error-codes/parameter-missing'
-
-
+  /user/update:
+    put:
+      tags:
+        - user
+      summary: Update user information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /user/favourite/{productId}:
+    post:
+      tags:
+        - user
+      summary: Add a product to favorites
+      parameters:
+        - name: productId
+          in: path
+          description: ID of the product to add to favorites
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /user/favourite:
+    get:
+      tags:
+        - user
+      summary: Get all favorite products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
 components:
   schemas:
     ObjectId:

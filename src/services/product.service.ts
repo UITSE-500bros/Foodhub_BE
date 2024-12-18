@@ -55,38 +55,26 @@ class ProductService {
       throw error;
     }
   }
-  async updateProductType() {
+  async updateCategory(newCategoryName: string, categoryId: string): Promise<void> {
     try {
-        const productsCollection = await mongoService.getCollection('Products');
-        const categoriesCollection = await mongoService.getCollection('Categories');
+      const productsCollection = await mongoService.getCollection('Products');
 
-        // Fetch all categories to match with products
-        const categories = await categoriesCollection.find({}).toArray();
-        
-        // Iterate over each category
-        for (const category of categories) {
-            // Find products that match the categoryName
-            const matchingProducts = await productsCollection.find({ product_type: category.categoryName }).toArray();
+      const result = await productsCollection.updateMany(
+        { productType: new ObjectId(categoryId) }, // Ensure categoryId is treated as ObjectId
+        { $set: { productType: new ObjectId(newCategoryName) } }
+      );
 
-            // For each matching product, update its product_type to match the category's name
-            for (const product of matchingProducts) {
-                await productsCollection.updateOne(
-                    { _id: product._id }, // Find the product by its _id
-                    {
-                        $unset: { product_type: "" }, // Remove the existing product_type if needed
-                        $set: { productType: category._id } // Set the product_type to the category's name
-                    }
-                );
-                console.log(`Updated product with _id: ${product._id} to category: ${category.categoryName}`);
-            }
-        }
+      if (result.matchedCount === 0) {
+        console.error('No category found with the specified ID');
+        throw new Error('Category not found');
+      }
 
-        return { message: 'Product types updated successfully' };
+      console.log('Category updated successfully');
     } catch (error) {
-        console.error('Error updating product types:', error);
-        throw error;
+      console.error('Error updating category:', error);
+      throw error; // Ensure error is thrown for proper handling elsewhere
     }
-}
+  }
 
 
 }
