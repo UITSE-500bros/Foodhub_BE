@@ -13,7 +13,11 @@ class ProductController {
     }
     async getProductDetailById(req:Request, res:Response) {
         try{
-            const result = await productService.getProductById(req.params.id);
+            const {product_id} = req.query;
+            if (typeof product_id !== 'string') {
+                throw new Error('Invalid category id');
+            }
+            const result = await productService.getProductById(product_id);
             res.status(200).json(result);
         } catch (error) {
             console.error('Error getting product by id', error);
@@ -22,9 +26,11 @@ class ProductController {
     }
     async getProductByCategory(req:Request, res:Response) {
         try{
-            const {id} = req.params;
-            console.log('id', id);
-            const result = await productService.getProductByCategory(id);
+            const {category_id} = req.query;
+            if (typeof category_id !== 'string') {
+                throw new Error('Invalid category id');
+            }
+            const result = await productService.getProductByCategory(category_id);
             res.status(200).json(result);
         } catch (error) {
             console.error('Error getting product by category', error);

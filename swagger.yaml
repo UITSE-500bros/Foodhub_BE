@@ -78,18 +78,19 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /product/{productId}:
+  /product/product_detail:
     get:
       tags:
         - product
       summary: Get a product by ID
       parameters:
-        - name: productId
-          in: path
+        - name: product_id
+          in: query
           description: ID of the product to return
           required: true
           schema:
-            $ref: '#/components/schemas/ObjectId'
+            type: string
+            format: uuid # If your product_id is a UUID
       responses:
         '200':
           description: Successful operation
@@ -99,18 +100,20 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Product not found
-  /product/category/{categoryId}:
+
+  /product/category:
     get:
       tags:
         - product
       summary: Get all products in a category
       parameters:
-        - name: categoryId
-          in: path
+        - name: category_id
+          in: query
           description: ID of the category to return products from
           required: true
           schema:
-            $ref: '#/components/schemas/ObjectId'
+            type: string
+            format: uuid # If your category_id is a UUID
       responses:
         '200':
           description: Successful operation
@@ -303,7 +306,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-
   /bucket:
     get:
       tags:
