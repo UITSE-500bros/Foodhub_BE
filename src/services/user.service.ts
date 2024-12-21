@@ -1,38 +1,62 @@
-
+import supabaseClient from "./postgresql.service";
 
 class UserService {
+    private instance: any;
+    private table = 'users';
+    constructor() {
+        this.instance = supabaseClient.getInstance();
+    }
 
-    // async getUserById(id: string) {
-    //     // Get user by id logic here
-    //     const usersCollection = await mongoService.getCollection('Users');
-    //     return await usersCollection.findOne({ _id: new ObjectId(id) });
+    async getUserProfile(id: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .select('*')
+                .eq('id', id)
+                .single();
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
-    // }
-    // async updateUser(id: string, user: User) {
-    //     // Update user logic here
-    //     const usersCollection = await mongoService.getCollection('Users');
-    //     const result = await usersCollection.updateOne({ _id: new ObjectId(id) }, { $set: user });
-    //     return result.modifiedCount;
-    // }
+    async updateUserProfile(id: string, user: any) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .update(user)
+                .eq('id', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
-    // async createUser(user: User) {
-    //     // Create user logic here
-    //     const usersCollection = await mongoService.getCollection('Users');
-    //     await usersCollection.insertOne(user);
-    //     return {...user};
-    // }
-    // async getFavourites(id: string) {
-    //     // Get user by id logic here
-    //     const usersCollection = await mongoService.getCollection('Users');
-    //     const user = await usersCollection.findOne({ _id: new ObjectId(id) });
-    //     return user.favouriteProducts;
-    // }
-    // async addFavourite(id: string, productId: string) {
-    //     // Get user by id logic here
-    //     const usersCollection = await mongoService.getCollection('Users');
-    //     const result = await usersCollection.updateOne({ _id: new ObjectId(id) }, { $push: { favouriteProducts: new ObjectId(productId) } });
-    //     return result.modifiedCount;
-    // }
+    async getFavorites(id: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .select('*')
+                .eq('userId', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async addFavorite(id: string, productId: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .insert([{ userId: id, productId: productId }]);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 const userService = new UserService();
 export default userService;

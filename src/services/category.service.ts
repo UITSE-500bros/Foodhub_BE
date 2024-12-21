@@ -31,8 +31,6 @@ class CategoryService {
         }
     }
 
-    
-
     async createCategory(category: Category) {
         try {
             const { data, error } = await supabaseClient.getInstance().from('categories').insert(category);

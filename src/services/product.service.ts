@@ -1,10 +1,17 @@
 import supabaseClient from './postgresql.service';
-import { Product } from '../models';
 
 class ProductService {
+  private instance: any;
+  private table = 'products';
+  constructor() {
+    this.instance = supabaseClient.getInstance();
+  }
+
   async getProducts() {
     try {
-      const { data, error } = await supabaseClient.getInstance().from('products').select('id, created_at, updated_at, product_name, product_price, category_id, is_sale, percentage_sale, product_image, brand');
+      const { data, error } = await this.instance
+        .from(this.table)
+        .select('id, created_at, updated_at, product_name, product_price, category_id, is_sale, percentage_sale, product_image, brand, quantity');
       if (error) {
         console.error('Error getting categories:', error);
         throw error;
@@ -18,7 +25,9 @@ class ProductService {
 
   async getProductType() {
     try {
-      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
+      const { data, error } = await this.instance
+        .from(this.table)
+        .select('*');
       if (error) {
         console.error('Error getting categories:', error);
         throw error;
@@ -32,7 +41,10 @@ class ProductService {
 
   async getProductById(id: string) {
     try {
-      const { data, error } = await supabaseClient.getInstance().from('products').select().eq('id', id);
+      const { data, error } = await this.instance
+        .from(this.table)
+        .select('product_detail')
+        .eq('id', id);
       if (error) {
         console.error('Error getting categories:', error);
         throw error;
@@ -47,9 +59,9 @@ class ProductService {
     try {
       console.log('categoryId', categoryId);
       const { data, error } = await supabaseClient.getInstance()
-                    .from('products')
-                    .select('id, created_at, updated_at, product_name, product_price, category_id, is_sale, percentage_sale, product_image, brand')
-                    .eq('category_id', categoryId)
+        .from('products')
+        .select('id, created_at, updated_at, product_name, product_price, is_sale, percentage_sale, product_image, brand, quantity')
+        .eq('category_id', categoryId)
       if (error) {
         console.error('Error getting categories:', error);
         throw error;
@@ -60,34 +72,7 @@ class ProductService {
       throw error;
     }
   }
-  async updateProduct(id: string, product: Product) {
-    try {
-      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
-      if (error) {
-        console.error('Error getting categories:', error);
-        throw error;
-      }
-      return data;
-    } catch (error) {
-      console.error('Error updating product:', error);
-      throw error;
-    }
-  }
-  async updateCategory(newCategoryName: string, categoryId: string): Promise<void> {
-    try {
-      const { error } = await supabaseClient.getInstance().from('products').select('*');
-      if (error) {
-        console.error('Error getting categories:', error);
-        throw error;
-      }
-      return;
-    } catch (error) {
-      console.error('Error updating category:', error);
-      throw error; // Ensure error is thrown for proper handling elsewhere
-    }
-  }
-
-
+  
 }
 const productService = new ProductService();
 export default productService;

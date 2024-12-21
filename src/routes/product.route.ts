@@ -9,5 +9,4 @@ productRouter.get('/', productController.getProducts);
 
 // productRouter.delete('/:id', productController.deleteProduct);
 // productRouter.post('/', productController.createProduct);
-productRouter.put('/', productController.updateProductType);
 export default productRouter;

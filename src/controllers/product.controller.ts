@@ -37,16 +37,7 @@ class ProductController {
             res.status(500).json({message: 'Error getting product by category'});
         }
     }
-    async updateProductType(req:Request, res:Response) {
-        try{
-            const { idnew, idold } = req.body;
-            const result = await productService.updateCategory(idnew, idold);
-            res.status(200).json(result);
-        } catch (error) {
-            console.error('Error updating product', error);
-            res.status(500).json({message: 'Error updating product'});
-        }
-    }
+
 }
 const productController = new ProductController();
 export default productController;
