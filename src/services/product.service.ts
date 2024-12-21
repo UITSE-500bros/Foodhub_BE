@@ -1,11 +1,15 @@
-import { ObjectId } from 'mongodb';
-import mongoService from './mongo.service';
-import { Product } from 'src/models';
+import supabaseClient from './postgresql.service';
+import { Product } from '../models';
+
 class ProductService {
   async getProducts() {
     try {
-      const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      return await productsCollection.find({}).toArray();
+      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
     } catch (error) {
       console.error('Error getting products:', error);
       throw error;
@@ -14,13 +18,12 @@ class ProductService {
 
   async getProductType() {
     try {
-      const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      const result = await productsCollection.aggregate([
-        { $group: { _id: "$product_type" } }  // Group by 'product_type' to get distinct values
-      ]).toArray();
-
-      // Map the result to extract the 'product_type' values
-      return result.map(item => item._id);
+      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
     } catch (error) {
       console.error('Error getting products:', error);
       throw error;
@@ -29,8 +32,12 @@ class ProductService {
 
   async getProductById(id: string) {
     try {
-      const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      return await productsCollection.findOne({ _id: new ObjectId(id) });
+      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
     } catch (error) {
       console.error('Error getting product by id:', error);
       throw error;
@@ -38,9 +45,12 @@ class ProductService {
   }
   async getProductByCategory(id: string) {
     try {
-      const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      const result = await productsCollection.find({ productType: new ObjectId(id) }).toArray();
-      return result;
+      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
     } catch (error) {
       console.error('Error getting products:', error);
       throw error;
@@ -48,8 +58,12 @@ class ProductService {
   }
   async updateProduct(id: string, product: Product) {
     try {
-      const productsCollection = await mongoService.getCollection('Products'); // Ensure 'products' is the correct collection name
-      return await productsCollection.updateOne({ productId: id }, { $set: product });
+      const { data, error } = await supabaseClient.getInstance().from('products').select('*');
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
     } catch (error) {
       console.error('Error updating product:', error);
       throw error;
@@ -57,19 +71,12 @@ class ProductService {
   }
   async updateCategory(newCategoryName: string, categoryId: string): Promise<void> {
     try {
-      const productsCollection = await mongoService.getCollection('Products');
-
-      const result = await productsCollection.updateMany(
-        { productType: new ObjectId(categoryId) }, // Ensure categoryId is treated as ObjectId
-        { $set: { productType: new ObjectId(newCategoryName) } }
-      );
-
-      if (result.matchedCount === 0) {
-        console.error('No category found with the specified ID');
-        throw new Error('Category not found');
+      const { error } = await supabaseClient.getInstance().from('products').select('*');
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
       }
-
-      console.log('Category updated successfully');
+      return;
     } catch (error) {
       console.error('Error updating category:', error);
       throw error; // Ensure error is thrown for proper handling elsewhere

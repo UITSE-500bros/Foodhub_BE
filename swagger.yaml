@@ -9,6 +9,9 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
   - url: 'https://se-foodhub-7fdf668fb550.herokuapp.com/api'
+    description: Production server
+  - url: 'http://localhost:8888/api'
+    description: Local server
 tags:
   - name: auth
     description: Auth APIs
@@ -22,6 +25,8 @@ tags:
     description: Order APIs
   - name: cart
     description: Cart APIs
+  - name: file
+    description: File upload/download APIs
 paths:
   /auth/login:
     post:
@@ -298,6 +303,73 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+
+  /bucket:
+    get:
+      tags:
+        - file
+      summary: Get all banners at Homepage
+      description: Retrieve a list of all banner files in the specified bucket.
+      parameters:
+        - name: bucketName
+          in: query
+          description: Name of the storage bucket to retrieve files from.
+          required: true
+          schema:
+            type: string
+            example: banners
+      responses:
+        '200':
+          description: Successful response with a list of banners.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fileName:
+                      type: string
+                      description: Name of the banner file.
+                      example: banner1.png
+                    publicUrl:
+                      type: string
+                      description: Public URL of the banner file.
+                      example: https://your-supabase-instance-url.storage/v1/object/public/banners/banner1.png
+        '400':
+          description: Invalid bucket name or missing parameter.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+                    example: "Bucket name is required."
+        '404':
+          description: Bucket or files not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+                    example: "No files found in the specified bucket."
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+                    example: "An unexpected error occurred."
+      
 components:
   schemas:
     ObjectId:

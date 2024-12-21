@@ -1,13 +1,17 @@
 import { Category } from "../models";
-import mongoService from "./mongo.service";
+import supabaseClient from "./postgresql.service";
 
 class CategoryService {
     async getAllCategories() {
-        try{
-            const categoriesCollection = await mongoService.getCollection('Categories');
-            return await categoriesCollection.find({}).toArray();
+        try {
+            const { data, error } = await supabaseClient.getInstance().from('categories').select();
+            if (error) {
+                console.error('Error getting categories:', error);
+                throw error;
+            }
+            return data;
         }
-        catch(error){
+        catch (error) {
             console.error('Error getting categories:', error);
             throw error;
         }
@@ -15,24 +19,28 @@ class CategoryService {
 
     async getCategoryByName(categoryName: string) {
         try {
-            const categoriesCollection = await mongoService.getCollection('Categories');
-            return await categoriesCollection.findOne({ categoryName });
+            const { data, error } = await supabaseClient.getInstance().from('categories').select().eq('name', categoryName);
+            if (error) {
+                console.error('Error getting category by name:', error);
+                throw error;
+            }
+            return data;
         } catch (error) {
             console.error('Error getting category by name:', error);
             throw error;
         }
     }
 
+    
+
     async createCategory(category: Category) {
         try {
-            const categoriesCollection = await mongoService.getCollection('Categories');
-            const result = await categoriesCollection.insertOne(category);
-    
-            // Create a new category object to return with the insertedId
-            return {
-                ...category,  // Include all fields of the original category
-                _id: result.insertedId.toString()  // Add the Mongo-generated _id as a string
-            };
+            const { data, error } = await supabaseClient.getInstance().from('categories').insert(category);
+            if (error) {
+                console.error('Error creating category:', error);
+                throw error;
+            }
+            return data;
         } catch (error) {
             console.error('Error creating category:', error);
             throw error;  // Ensure error is thrown for proper handling elsewhere
