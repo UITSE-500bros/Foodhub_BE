@@ -100,7 +100,48 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Product not found
-
+  /product/new_arrivals:
+    get:
+      tags:
+        - product
+      summary: Get new arrival products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /product/best_seller:
+    get:
+      tags:
+        - product
+      summary: Get best seller products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /product/exclusive:
+    get:
+      tags:
+        - product
+      summary: Get exclusive products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
   /product/category:
     get:
       tags:

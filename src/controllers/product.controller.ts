@@ -38,6 +38,34 @@ class ProductController {
         }
     }
 
+    async getNewArrivals(req:Request, res:Response) {
+        try{
+            const result = await productService.getNewArrivals();
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Error getting new arrivals', error);
+            res.status(500).json({message: 'Error getting new arrivals'});
+        }
+    }
+    async getBestSeller(req:Request, res:Response) {
+        try{
+            const result = await productService.getBestSellers();
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Error getting best seller', error);
+            res.status(500).json({message: 'Error getting best seller'});
+        }
+    }
+    async getExclusive(req:Request, res:Response) {
+        try{
+            const result = await productService.getExclusive();
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Error getting exclusive', error);
+            res.status(500).json({message: 'Error getting exclusive'});
+        }
+    }
+
 }
 const productController = new ProductController();
 export default productController;

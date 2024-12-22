@@ -59,8 +59,8 @@ class ProductService {
     try {
       console.log('categoryId', categoryId);
       const { data, error } = await supabaseClient.getInstance()
-        .from('products')
-        .select('id, created_at, updated_at, product_name, product_price, is_sale, percentage_sale, product_image, brand, quantity')
+        .from(this.table)
+        .select('id, created_at, updated_at, product_name, product_price,category_id, is_sale, percentage_sale, product_image, brand, quantity')
         .eq('category_id', categoryId)
       if (error) {
         console.error('Error getting categories:', error);
@@ -71,6 +71,55 @@ class ProductService {
       console.error('Error getting products:', error);
       throw error;
     }
+  }
+
+  async getNewArrivals() {
+    try {
+      const { data } = await this.instance
+        .from('random_products')
+        .select('id, created_at, updated_at, product_name, product_price,category_id, is_sale, percentage_sale, product_image, brand, quantity')
+        .limit(6);
+      
+      return data;
+    } catch (error) {
+      
+    }
+  }
+
+  async getExclusive() {
+    try {
+      const { data, error } = await this.instance
+        .from('random_products')
+        .select('id, created_at, updated_at, product_name, product_price,category_id, is_sale, percentage_sale, product_image, brand, quantity')
+        .eq('is_sale', false)
+        .limit(6);
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
+    } catch (error) {
+      console.error('Error getting products:', error);
+      throw error;
+    }
+  }
+  async getBestSellers() {
+    try {
+      const { data, error } = await this.instance
+        .from('random_product')
+        .select('id, created_at, updated_at, product_name, product_price, is_sale, percentage_sale, product_image, brand, quantity')
+        .order('quantity', { ascending: false })
+        .limit(6);
+      if (error) {
+        console.error('Error getting categories:', error);
+        throw error;
+      }
+      return data;
+    } catch (error) {
+      console.error('Error getting products:', error);
+      throw error;
+    }
+
   }
   
 }
