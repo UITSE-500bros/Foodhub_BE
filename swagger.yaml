@@ -49,35 +49,6 @@ paths:
           description: Successful login
         '401':
           description: Unauthorized
-  /product:
-    get:
-      tags:
-        - product
-      summary: Get all products
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-    post:
-      tags:
-        - product
-      summary: Add a new product
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-      responses:
-        '200':
-          description: Successful operation
-        '400':
-          description: Invalid input
   /product/product_detail:
     get:
       tags:
@@ -166,6 +137,57 @@ paths:
                   $ref: '#/components/schemas/Product'
         '404':
           description: Category not found
+  /product:
+    get:
+      summary: Search for products
+      description: Fetch products by searching with a query term in their name.
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The search term to filter products by name.
+      responses:
+        200:
+          description: List of matching products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: "Giỏ hoa tươi"
+                    price:
+                      type: number
+                      format: float
+                      example: 25.5
+        400:
+          description: Invalid search query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid search query"
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error searching product"
   /category:
     get:
       tags:

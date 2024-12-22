@@ -66,6 +66,20 @@ class ProductController {
         }
     }
 
+    async searchProduct(req:Request, res:Response) {
+        try{
+            const {search} = req.query;
+            if (typeof search !== 'string') {
+                throw new Error('Invalid search query');
+            }
+            const result = await productService.searchProduct(search);
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Error searching product', error);
+            res.status(500).json({message: 'Error searching product'});
+        }
+    }
+
 }
 const productController = new ProductController();
 export default productController;

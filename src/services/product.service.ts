@@ -79,10 +79,10 @@ class ProductService {
         .from('random_products')
         .select('id, created_at, updated_at, product_name, product_price,category_id, is_sale, percentage_sale, product_image, brand, quantity')
         .limit(6);
-      
+
       return data;
     } catch (error) {
-      
+
     }
   }
 
@@ -121,7 +121,23 @@ class ProductService {
     }
 
   }
-  
+  async searchProduct(search: string) {
+    const { data, error } = await this.instance
+      .from(this.table)
+      .select()
+      .textSearch('product_name_english', `${search}`, {
+        config: 'english', // Use the Vietnamese configuration
+        type: 'plain',        // Optional: You can also use 'phrase' or 'websearch'
+      });
+
+    if (error) {
+      console.error('Error:', error);
+    } else {
+      console.log('Search Results:', data);
+    }
+
+  }
+
 }
 const productService = new ProductService();
 export default productService;
