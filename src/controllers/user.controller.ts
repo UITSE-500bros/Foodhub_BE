@@ -3,12 +3,6 @@ import { userService } from '../services';
 // import { User } from '../models';
 
 class userController {
-    async register(req: Request, res: Response) {
-
-    }
-    async login(req: Request, res: Response) {
-        
-    }
     async getFavorites(req: Request, res: Response) {
         try {
             const { id } = req.params;
@@ -35,8 +29,8 @@ class userController {
         }
     }
 
-    async loginWithGoogle(req: Request, res: Response) {
-
+    async updateProfile(req: Request, res: Response) {
+        
     }
 }
 export default new userController();

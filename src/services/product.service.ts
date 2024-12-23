@@ -132,9 +132,9 @@ class ProductService {
 
     if (error) {
       console.error('Error:', error);
-    } else {
-      console.log('Search Results:', data);
-    }
+    } 
+
+    return data;
 
   }
 
