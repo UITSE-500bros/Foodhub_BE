@@ -18,8 +18,9 @@ const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunc
     const token = authHeader.split(' ')[1];
 
     // Replace 'your-secret-key' with your actual JWT secret
-    const decoded = jwt.verify(token, 'souvershop') ;
-    req.customerId = (decoded as jwt.JwtPayload)._id; // Attach user_id to request
+    const decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET) ;
+    req.customerId = decoded.sub as string;  // Attach user_id to request
+
     next(); // Proceed to the next middleware/controller
   } catch (error) {
     console.error('Error in authMiddleware:', error);

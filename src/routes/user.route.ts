@@ -1,12 +1,11 @@
 import { Router } from "express";
-// import { userController } from "../controllers";
+import { userController } from "../controllers";
+import { authMiddleware } from "../middlewares";
 
 const userRouter = Router();
 
-// userRouter.post("/auth/google", userController.createUser);
-// userRouter.put("/:id", userController.updateInfo);
-// userRouter.get("/:id/favorites", userController.getFavorites);
-// userRouter.post("/:id/favorites/:productId", userController.addFavorite);
-
+userRouter.get("/favorites", userController.getFavorites);
+userRouter.post("/favorites",authMiddleware, userController.addFavorite);
+userRouter.patch("/profile",authMiddleware, userController.updateProfile);
 
 export default userRouter;

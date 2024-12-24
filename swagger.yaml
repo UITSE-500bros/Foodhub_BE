@@ -322,8 +322,8 @@ paths:
                         type: string
                         description: URL to Stripe's documentation for the error.
                         example: 'https://stripe.com/docs/error-codes/parameter-missing'
-  /user/update:
-    put:
+  /user/profile:
+    patch:
       tags:
         - user
       summary: Update user information

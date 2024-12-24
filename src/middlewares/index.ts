@@ -1,2 +1,3 @@
 import validatePassword from "./validatePassword";
-export { validatePassword };
+import authMiddleware from "./authorize";
+export { validatePassword , authMiddleware};
