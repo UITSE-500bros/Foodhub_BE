@@ -7,5 +7,7 @@ const userRouter = Router();
 userRouter.get("/favorites", userController.getFavorites);
 userRouter.post("/favorites",authMiddleware, userController.addFavorite);
 userRouter.patch("/profile",authMiddleware, userController.updateProfile);
+userRouter.post("/payment", userController.createPaymentUrl);
+userRouter.get("/payment/callback", userController.getReturn);
 
 export default userRouter;
