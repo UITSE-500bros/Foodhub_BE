@@ -126,9 +126,10 @@ class userController {
 
   async loginGoogle(req: Request, res: Response) {
     try {
-      await userService.loginWithProvider('google');
+      const data = await userService.loginWithProvider('google');
+      return res.status(200).json(data);
     } catch (error) {
-      res.status(400).send((error as Error).message);
+      return res.status(400).send((error as Error).message);
     }
   }
   async loginFacebook(req: Request, res: Response) {
