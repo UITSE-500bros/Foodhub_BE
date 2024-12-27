@@ -52,8 +52,6 @@ class userController {
             return res.status(500).json({ message: "Internal server error" });
         }
     }
-
-    // VNPAY with card
     async createPaymentUrl(req: Request, res: Response) {
         const amount: number = req.body.amount;
         if (amount < 5000) {

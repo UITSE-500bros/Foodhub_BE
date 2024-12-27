@@ -122,17 +122,18 @@ class ProductService {
 
   }
   async searchProduct(search: string) {
+    console.log('search', search);
     const { data, error } = await this.instance
       .from(this.table)
       .select()
       .textSearch('product_name_english', `${search}`, {
-        config: 'english', // Use the Vietnamese configuration
         type: 'plain',        // Optional: You can also use 'phrase' or 'websearch'
       });
 
+    console.log('data', data);
     if (error) {
       console.error('Error:', error);
-    } 
+    }
 
     return data;
 
