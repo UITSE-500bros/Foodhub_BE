@@ -146,7 +146,9 @@ class userController {
     }
     const { access_token, refresh_token } = params as { access_token: string, refresh_token: string };
 
-    if (!access_token) return;
+    if (!access_token) {
+      return res.status(400).json({ message: "Access token is required" });
+    }
     const session = await userService.setSession(access_token as string, refresh_token as string);
     return res.status(200).json(session);
   }
