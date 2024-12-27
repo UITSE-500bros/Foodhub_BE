@@ -152,7 +152,7 @@ class userController {
     const accessToken = req.query.access_token as string;
     const refreshToken = req.query.refresh_token as string;
     if (accessToken && refreshToken) {
-      res.redirect('com.se.foodhub://');
+      res.redirect('com.se.foodhub://login');
     } else {
       console.log('Access token not found in query parameters');
       res.status(400).send('Access token not found');
