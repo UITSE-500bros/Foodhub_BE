@@ -63,6 +63,7 @@ class UserService {
             const { data, error } = await this.instance.auth.signInWithOAuth({
                 provider: provider, // Change provider to Google
                 options: {
+                    redirectTo: process.env.REDIRECT_URL, // The URL to redirect to after login
                     skipBrowserRedirect: true,
                     queryParams: {
                         prompt: "select_account", // Forces Google to show the account picker
