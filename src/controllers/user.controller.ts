@@ -139,16 +139,37 @@ class userController {
       res.status(400).send((error as Error).message);
     }
   }
+  async retrieveSession(req: Request, res: Response) {
+    const { access_token, refresh_token } = req.body;
+    const result = await userService.setSession(access_token, refresh_token);
+    if (!result) {
+      return res.status(400).json({ login: 'Login failed' });
+    }
+    return res.status(200).json({ login: 'Login success' });
+  }
+
   async redirectCallback(req: Request, res: Response) {
-    const {access_token} = req.params;
-    const {refresh_token} = req.params;
-    // try {
-    //   await userService.setSession(access_token, refresh_token);
-    // } catch (error) {
-    //   res.status(400).send((error as Error).message);
-    // }
-    console.log(access_token, refresh_token);
-    return res.status(200).json({login: 'Login success'});
+    const accessToken = req.query.access_token as string;
+    const refreshToken = req.query.refresh_token as string;
+    if (accessToken && refreshToken) {
+      res.redirect('com.se.foodhub://');
+    } else {
+      console.log('Access token not found in query parameters');
+      res.status(400).send('Access token not found');
+    }
+  }
+
+  async getDeliveryAddress(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        throw new Error('Missing required fields: id');
+      }
+      const address = await userService.getDeliveryAddress(id);
+      res.status(200).send(address);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
   }
 }
 export default new userController();
