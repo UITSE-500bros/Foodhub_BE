@@ -57,6 +57,33 @@ class UserService {
             throw error;
         }
     }
+
+    async loginWithProvider(provider: string) {
+        try {
+            const { data, error } = await this.instance.auth.signInWithOAuth({
+                provider: provider, // Change provider to Google
+                options: {
+                    skipBrowserRedirect: true,
+                    queryParams: {
+                        prompt: "select_account", // Forces Google to show the account picker
+                    },
+                },
+            });
+            if (error) throw error;
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async setSession(access_token: string, refresh_token: string) {
+        const { data, error } = await this.instance.auth.setSession({
+            access_token,
+            refresh_token,
+        });
+        if (error) throw error;
+        return data.session;
+    }
 }
 const userService = new UserService();
 export default userService;
