@@ -148,7 +148,7 @@ class userController {
 
     if (!access_token) return;
     const session = await userService.setSession(access_token as string, refresh_token as string);
-    res.status(200).send(session);
+    return res.status(200).json(session);
   }
 }
 export default new userController();
