@@ -1,5 +1,6 @@
 import supabaseClient from "./postgresql.service";
-
+import dotenv from 'dotenv'
+dotenv.config();
 class UserService {
     private instance: any;
     private table = 'users';
