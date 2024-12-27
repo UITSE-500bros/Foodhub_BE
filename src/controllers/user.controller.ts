@@ -140,20 +140,15 @@ class userController {
     }
   }
   async redirectCallback(req: Request, res: Response) {
-    const { access_token, refresh_token } = req.query as {
-      access_token: string;
-      refresh_token: string;
-    };
-
-    if (!access_token) {
-      return res.status(400).json({ message: "Access token is required" });
-    }
-
-    // Set the session with the tokens
-    const session = await userService.setSession(access_token, refresh_token);
-
-    // Respond with session data
-    return res.status(200).json({ success: true, session });
+    const {access_token} = req.params;
+    const {refresh_token} = req.params;
+    // try {
+    //   await userService.setSession(access_token, refresh_token);
+    // } catch (error) {
+    //   res.status(400).send((error as Error).message);
+    // }
+    console.log(access_token, refresh_token);
+    return res.status(200).json({login: 'Login success'});
   }
 }
 export default new userController();
