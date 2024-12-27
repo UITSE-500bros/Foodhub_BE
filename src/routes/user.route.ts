@@ -10,5 +10,5 @@ userRouter.patch("/profile",authMiddleware, userController.updateProfile);
 userRouter.post("/payment", userController.createPaymentUrl);
 userRouter.get("/payment/callback", userController.getReturn);
 userRouter.get("/google", userController.loginGoogle);
-userRouter.get("/callback", userController.redirectCallback);
+userRouter.post("/callback", userController.redirectCallback);
 export default userRouter;

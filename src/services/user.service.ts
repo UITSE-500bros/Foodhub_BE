@@ -68,6 +68,7 @@ class UserService {
                     skipBrowserRedirect: true,
                     queryParams: {
                         prompt: "select_account", // Forces Google to show the account picker
+                        response_type: 'code', // Tells Google to return an authorization code
                     },
                 },
             });
