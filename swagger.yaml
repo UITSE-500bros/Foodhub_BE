@@ -381,6 +381,7 @@ paths:
             application/json:
               schema:
                 type: string
+                
   
   /bucket:
     get:
