@@ -6,9 +6,9 @@ const userRouter = Router();
 userRouter.get("/favorites", userController.getFavorites);
 userRouter.post("/favorites",authMiddleware, userController.addFavorite);
 userRouter.patch("/profile",authMiddleware, userController.updateProfile);
-userRouter.post("/payment", userController.createPaymentUrl);
-userRouter.get("/payment/callback", userController.getReturn);
 userRouter.get("/google", userController.loginGoogle);
 userRouter.get("/handlecallback", userController.redirectCallback);
+userRouter.post("/refreshToken", userController.retrieveSession)
+
 
 export default userRouter;

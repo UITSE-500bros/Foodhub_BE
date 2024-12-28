@@ -369,6 +369,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+  /user/refreshToken:
+    post:
+      tags:
+        - user
+      summary: Refresh session ( included accessToken and refreshToken)
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  
   /bucket:
     get:
       tags:

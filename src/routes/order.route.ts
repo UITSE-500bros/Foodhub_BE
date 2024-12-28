@@ -1,11 +1,14 @@
 import { Router } from "express";
-// import { orderController } from "../controllers";
+import { orderController } from "../controllers";
 
 const orderRouter = Router();
 
-// orderRouter.get('/:orderId', orderController.getOrderDetail);
-// orderRouter.get('/track/:orderId', orderController.trackOrder);
-// orderRouter.post('/payment', orderController.createPaymentIntent);
-// orderRouter.put('/:orderId', orderController.updateOrder);
-// orderRouter.get('/user/:userId', orderController.getOrdersByUserID);
+orderRouter.get("/", orderController.getOrders);
+orderRouter.get("/:id", orderController.getOrderDetail);
+orderRouter.put("/:id", orderController.updateAnOrder);
+orderRouter.delete("/:id", orderController.cancelAnOrder);
+
+orderRouter.post("/createPaymentIntent", orderController.createPaymentUrl);
+orderRouter.post("/paymentCallback", orderController.getReturn);
+
 export default orderRouter;

@@ -6,7 +6,6 @@ class CartService {
     constructor() {
         this.instance = supabaseClient.getInstance();
     }
-    
 
 
     async getCartByUserID(userId: string) {
@@ -61,6 +60,17 @@ class CartService {
             .eq('user_id', userId);
         if (error) {
             console.error('Error clearing cart:', error);
+            throw error;
+        }
+        return data;
+    }
+
+    async createCartByUserID(userId: string) {
+        const { data, error } = await this.instance
+            .from(this.table)
+            .insert([{ user_id: userId }]);
+        if (error) {
+            console.error('Error creating cart:', error);
             throw error;
         }
         return data;
