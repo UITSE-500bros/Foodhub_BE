@@ -43,7 +43,7 @@ class ProductService {
     try {
       const { data, error } = await this.instance
         .from(this.table)
-        .select('product_detail,created_at, updated_at, product_name, product_price,category_id, is_sale, percentage_sale, product_image, brand, quantity')
+        .select('id,product_detail,created_at, updated_at, product_name, product_price,category_id, is_sale, percentage_sale, product_image, brand, quantity')
         .eq('id', id);
       if (error) {
         console.error('Error getting categories:', error);
