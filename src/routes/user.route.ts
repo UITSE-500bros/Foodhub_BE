@@ -8,7 +8,8 @@ userRouter.post("/favorites",authMiddleware, userController.addFavorite);
 userRouter.patch("/profile",authMiddleware, userController.updateProfile);
 userRouter.get("/google", userController.loginGoogle);
 userRouter.get("/handlecallback", userController.redirectCallback);
-userRouter.post("/refreshToken", userController.retrieveSession)
+userRouter.post("/refreshToken", userController.retrieveSession);
+
 
 
 export default userRouter;
