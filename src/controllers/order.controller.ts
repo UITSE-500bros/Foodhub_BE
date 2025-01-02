@@ -89,7 +89,7 @@ class orderController {
         vnp_Locale: locale,
         vnp_CurrCode: currCode,
         vnp_TxnRef: orderId,
-        vnp_OrderInfo: `Thanh toan cho ma GD:${orderId}, ${JSON.stringify(req.body.products)}`,
+        vnp_OrderInfo: `Thanh toan cho ma GD:${orderId}`,
         vnp_OrderType: 'other',
         vnp_Amount: amount * 100,
         vnp_ReturnUrl: returnUrl,

@@ -39,8 +39,8 @@ class UserService {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
-                .select('*')
-                .eq('userId', id);
+                .select('id, favouriteList')
+                .eq('id', id);
             if (error) throw error;
             return data;
         } catch (error) {
@@ -51,7 +51,10 @@ class UserService {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
-                .insert([{ userId: id, productId: productId }]);
+                .insert({
+                    favouriteList: productId
+                })
+                .eq('id', id);
             if (error) throw error;
             return data;
         } catch (error) {

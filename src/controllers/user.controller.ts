@@ -5,12 +5,10 @@ import { AuthenticatedRequest } from 'src/middlewares/authorize';
 
 
 class userController {
-  async getFavorites(req: Request, res: Response) {
+  async getFavorites(req: AuthenticatedRequest, res: Response) {
     try {
-      const { id } = req.params;
-      if (!id) {
-        throw new Error('Missing required fields: id');
-      }
+      const id = req.customerId;
+     
       const favorites = await userService.getFavorites(id);
       res.status(200).send(favorites);
     } catch (error) {
@@ -34,8 +32,7 @@ class userController {
   async updateProfile(req: AuthenticatedRequest, res: Response) {
     try {
       const userId = req.customerId;
-      const updateData = req.body; // Lấy dữ liệu cập nhật từ body request
-      // Gọi service để cập nhật thông tin user
+      const updateData = req.body; 
       const updatedUser = await userService.updateUserProfile(userId, updateData);
 
       // Nếu không tìm thấy user

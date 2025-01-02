@@ -247,24 +247,108 @@ paths:
           description: Successful operation
         "400":
           description: Invalid input
-  
+
   /user/profile:
     patch:
       tags:
         - user
       summary: Update user information
+      description: Allows a user to update their profile information.
+      operationId: updateUserProfile
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the user.
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  description: The email address of the user.
+                  example: john.doe@example.com
+                facebookID:
+                  type: string
+                  description: The Facebook ID of the user.
+                  example: 1234567890
+                favouriteList:
+                  type: object
+                  description: The user's favorite items list.
+                  example:
+                    categories: ["Books", "Movies"]
+                    items: ["The Great Gatsby", "Inception"]
+                avatar:
+                  type: string
+                  description: The URL of the user's avatar.
+                  example: https://example.com/avatar.jpg
+                phoneNumber:
+                  type: string
+                  description: The user's phone number.
+                  example: 0123456789
+                address:
+                  type: string
+                  description: The user's address.
+                  example: "123 Bến Thành, Quận 1"
       responses:
-        "200":
-          description: Successful operation
-        "400":
-          description: Invalid input
-  /user/favourite/{productId}:
+        '200':
+          description: Successfully updated user information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User profile updated successfully."
+        '400':
+          description: Bad request. Invalid input data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid input data."
+        '401':
+          description: Unauthorized. User authentication failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized."
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "An error occurred while updating the profile."
+
+      
+  /user/favourite:
     post:
       tags:
         - user
@@ -281,7 +365,6 @@ paths:
           description: Successful operation
         "400":
           description: Invalid input
-  /user/favourite:
     get:
       tags:
         - user
