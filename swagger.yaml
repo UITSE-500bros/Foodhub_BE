@@ -271,10 +271,6 @@ paths:
                   format: email
                   description: The email address of the user.
                   example: john.doe@example.com
-                facebookID:
-                  type: string
-                  description: The Facebook ID of the user.
-                  example: 1234567890
                 favouriteList:
                   type: object
                   description: The user's favorite items list.
