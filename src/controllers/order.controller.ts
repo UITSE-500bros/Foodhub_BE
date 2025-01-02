@@ -4,6 +4,7 @@ import moment from 'moment'
 import { Request, Response } from 'express';
 import { sortObject } from '../utils';
 import { orderService } from '../services';
+import { AuthenticatedRequest } from '../middlewares/authorize';
 class orderController {
   async getOrderDetail(req: Request, res: Response) {
     const {user_id, order_id} = req.params;
@@ -58,12 +59,12 @@ class orderController {
     }
   }
 
-  async createPaymentUrl(req: Request, res: Response) {
+  async createPaymentUrl(req: AuthenticatedRequest, res: Response) {
+
     const amount: number = req.body.amount;
     if (amount < 5000) {
       return res.status(404).json("The amount must be larger than 5000 vnd")
     }
-
     process.env.TZ = 'Asia/Ho_Chi_Minh'
     const date = new Date()
     const createDate = moment(date).format('YYYYMMDDHHmmss')
@@ -71,9 +72,10 @@ class orderController {
     const tmnCode: string = process.env.VNP_TMN_CODE
     const secretKey: string = process.env.VNP_HASH_SECRET
     const vnpUrl: string = process.env.VNP_URL
-    const returnUrl: string = process.env.VNP_RETURN_URL
-    const orderId = moment(date).format('DDHHmmss');
+    const returnUrl: string = process.env.VNP_RETURN_URL;
+    const customerId: string = req.customerId;
 
+    const orderId = await orderService.generateOrderId(customerId, amount, req.body.products);
 
     const bankCode: string = req.body.bankCode
     let locale: string = req.body.language
@@ -94,8 +96,11 @@ class orderController {
         vnp_Amount: amount * 100,
         vnp_ReturnUrl: returnUrl,
         vnp_IpAddr: ipAddr,
-        vnp_CreateDate: createDate
+        vnp_CreateDate: createDate,
       }
+      const expireDate = moment(date).add(15, 'minutes').format('YYYYMMDDHHmmss');
+      vnp_Params['vnp_ExpireDate'] = expireDate;
+
       if (bankCode) {
         vnp_Params['vnp_BankCode'] = bankCode
       }
@@ -123,9 +128,28 @@ class orderController {
     const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
     if (secureHash === signed) {
-      console.log(vnp_Params['vnp_OrderInfo']);
-
-      return res.status(200).json('Payment success');
+      const orderId = vnp_Params['vnp_TxnRef'];
+      await orderService.updateOrderStatus(orderId as string, vnp_Params['vnp_ResponseCode'] as string);
+      switch (vnp_Params['vnp_ResponseCode']) {
+        case '00':
+          return res.status(200).json('Transaction successful');
+        case '01':
+          return res.status(400).json('Transaction incomplete');
+        case '02':
+          return res.status(400).json('Transaction error');
+        case '04':
+          return res.status(400).json('Reversed transaction: customer charged but transaction failed');
+        case '05':
+          return res.status(202).json('Transaction is being processed by VNPAY (refund)');
+        case '06':
+          return res.status(202).json('Refund request sent to bank by VNPAY');
+        case '07':
+          return res.status(403).json('Transaction suspected of fraud');
+        case '09':
+          return res.status(400).json('Refund transaction rejected');
+        default:
+          return res.status(400).json('Unknown response code');
+      }
     } else {
       return res.status(404).json('Invalid payment');
     }
