@@ -39,7 +39,7 @@ class OrderService {
     return data;
   }
 
-  async generateOrderId(customerId, amount, products) {
+  async generateOrderId(customerId: string, amount: number, products: any) {
     const { data, error } = await this.instance
       .from("orders")
       .insert({ customer_id: customerId, total: amount, product_list: products })
@@ -52,17 +52,17 @@ class OrderService {
       products.map(async ({ product_id, quantity }) => {
         try {
           const { data: productData, error: selectError } = await this.instance
-            .from("product")
-            .select("product_quantity")
-            .eq("product_id", product_id)
+            .from("products")
+            .select("quantity")
+            .eq("id", product_id)
             .single();
 
           if (selectError) throw selectError;
 
           const { error: updateError } = await this.instance
-            .from("product")
-            .update({ product_quantity: productData.product_quantity - quantity })
-            .eq("product_id", product_id);
+            .from("products")
+            .update({ quantity: productData.quantity - quantity })
+            .eq("id", product_id);
 
           if (updateError) throw updateError;
         } catch (err) {
@@ -71,7 +71,7 @@ class OrderService {
       })
     );
 
-    return data.receipt_id;
+    return data.id;
   }
 
   async updateOrderStatus(orderId, responseCode) {
@@ -79,28 +79,28 @@ class OrderService {
 
     if (responseCode !== "00") {
       const { data: orderData, error: orderError } = await this.instance
-        .from("order")
+        .from("orders")
         .select("product_list")
-        .eq("receipt_id", orderId)
+        .eq("id", orderId)
         .single();
 
       if (orderError) throw orderError;
 
       await Promise.all(
-        orderData.product_list.map(async ({ product_id, quantity }) => {
+        orderData.productList.map(async ({ product_id, quantity }) => {
           try {
             const { data: productData, error: selectError } = await this.instance
-              .from("product")
-              .select("product_quantity")
-              .eq("product_id", product_id)
+              .from("products")
+              .select("quantity")
+              .eq("id", product_id)
               .single();
 
             if (selectError) throw selectError;
 
             const { error: updateError } = await this.instance
-              .from("product")
-              .update({ product_quantity: productData.product_quantity - quantity })
-              .eq("product_id", product_id);
+              .from("products")
+              .update({ quantity: productData.quantity - quantity })
+              .eq("id", product_id);
 
             if (updateError) throw updateError;
           } catch (err) {
@@ -111,11 +111,13 @@ class OrderService {
     }
 
     const { data, error } = await this.instance
-      .from("order")
+      .from("orders")
       .update({ transaction_status: status })
-      .eq("receipt_id", orderId);
+      .eq("id", orderId)
+      .select();
 
     if (error) throw error;
+    console.log("Order status updated:", data);
     return data;
   }
 }
