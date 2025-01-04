@@ -465,6 +465,119 @@ paths:
                         type: string
                         description: URL to Stripe's documentation for the error.
                         example: "https://stripe.com/docs/error-codes/parameter-missing"
+  /order/paymentCallback:
+    post:
+      tags:
+        - order
+      summary: Handle payment callback
+      description: Processes payment callback data sent by the payment gateway.
+      parameters:
+        - name: vnp_Amount
+          in: query
+          required: true
+          description: Transaction amount (in smallest currency unit, e.g., cents).
+          schema:
+            type: integer
+            example: 4200000
+        - name: vnp_BankCode
+          in: query
+          required: true
+          description: Bank code used for the transaction.
+          schema:
+            type: string
+            example: NCB
+        - name: vnp_BankTranNo
+          in: query
+          required: false
+          description: Bank transaction number.
+          schema:
+            type: string
+            example: VNP14780850
+        - name: vnp_CardType
+          in: query
+          required: false
+          description: Type of card used (e.g., ATM, credit).
+          schema:
+            type: string
+            example: ATM
+        - name: vnp_OrderInfo
+          in: query
+          required: true
+          description: Order information or description.
+          schema:
+            type: string
+            example: Thanh toan cho ma GD:7e211c7e-3555-497e-93c3-5e61735d4096
+        - name: vnp_PayDate
+          in: query
+          required: true
+          description: Date and time of payment.
+          schema:
+            type: string
+            format: date-time
+            example: "20250105002959"
+        - name: vnp_ResponseCode
+          in: query
+          required: true
+          description: Response code indicating the payment status (00 indicates success).
+          schema:
+            type: string
+            example: "00"
+        - name: vnp_TmnCode
+          in: query
+          required: true
+          description: Terminal code assigned by the payment gateway.
+          schema:
+            type: string
+            example: GOG8GLBV
+        - name: vnp_TransactionNo
+          in: query
+          required: true
+          description: Unique transaction identifier from the payment gateway.
+          schema:
+            type: string
+            example: "14780850"
+        - name: vnp_TransactionStatus
+          in: query
+          required: true
+          description: Transaction status (00 indicates success).
+          schema:
+            type: string
+            example: "00"
+        - name: vnp_TxnRef
+          in: query
+          required: true
+          description: Reference code for the transaction.
+          schema:
+            type: string
+            example: 7e211c7e-3555-497e-93c3-5e61735d4096
+        - name: vnp_SecureHash
+          in: query
+          required: true
+          description: Secure hash for verifying the callback's authenticity.
+          schema:
+            type: string
+            example: dd8a12075ee866e9c1393156fd02379e87e9738ede29974af965bb9b3a74a5785967dad89b86527d9b2646d9f7d9dc5a23b972570fcf70eba87034b067e768fa
+      responses:
+        '200':
+          description: Payment callback processed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Payment processed successfully.
+        '400':
+          description: Invalid callback data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid secure hash.
 
   /bucket:
     get:

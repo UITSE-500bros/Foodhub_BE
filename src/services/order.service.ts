@@ -87,7 +87,7 @@ class OrderService {
       if (orderError) throw orderError;
 
       await Promise.all(
-        orderData.productList.map(async ({ product_id, quantity }) => {
+        orderData.product_list.map(async ({ product_id, quantity }) => {
           try {
             const { data: productData, error: selectError } = await this.instance
               .from("products")
