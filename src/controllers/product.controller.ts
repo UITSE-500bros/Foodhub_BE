@@ -19,7 +19,6 @@ class ProductController {
                 throw new Error('Invalid category id');
             }
             const result = await productService.getProductById(product_id);
-            console.log(result);
             res.status(200).json(result);
         } catch (error) {
             console.error('Error getting product by id', error);
