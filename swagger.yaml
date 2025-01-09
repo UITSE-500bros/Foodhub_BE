@@ -28,7 +28,7 @@ tags:
   - name: file
     description: File upload/download APIs
 paths:
-  /auth/login:
+  /auth/google:
     post:
       tags:
         - auth
@@ -49,6 +49,29 @@ paths:
           description: Successful login
         "401":
           description: Unauthorized
+  /auth/facebook:
+    post:
+      tags:
+        - auth
+      summary: Login to the application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Email of the user
+                  example: ""
+      responses:
+        "200":
+          description: Successful login
+        "401":
+          description: Unauthorized
+  
+  
   /product/product_detail:
     get:
       tags:

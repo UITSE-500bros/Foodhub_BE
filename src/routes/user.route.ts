@@ -4,6 +4,7 @@ import { authMiddleware } from "../middlewares";
 const userRouter = Router();
 
 userRouter.get("/google", userController.loginGoogle);
+userRouter.get("/facebook", userController.loginFacebook);
 userRouter.get("/handlecallback", userController.redirectCallback);
 userRouter.post("/refreshToken", userController.retrieveSession);
 userRouter.get("/favorites", authMiddleware,userController.getFavorites);
