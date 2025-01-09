@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { userService } from '../services';
 import { AuthenticatedRequest } from 'src/middlewares/authorize';
-import { ProductInterface } from '../models/product.model';
 // import { User } from '../models';
 
 
@@ -116,67 +115,6 @@ class UserController {
       }
       const address = await userService.getDeliveryAddress(id);
       res.status(200).send(address);
-    } catch (error) {
-      res.status(400).send((error as Error).message);
-    }
-  }
-
-  //Cart
-  async getCart(req: AuthenticatedRequest, res: Response) {
-    try {
-      const id = req.customerId;
-      const cart = await userService.getCart(id);
-      res.status(200).send(cart);
-    } catch (error) {
-      res.status(400).send((error as Error).message);
-    }
-  }
-  async addToCart(req: AuthenticatedRequest, res: Response) {
-    try {
-      const { productId , quantity } = req.body;
-      const userId = req.customerId;
-      if (!productId) {
-        throw new Error('Missing required fields: id, productId');
-      }
-      const product: ProductInterface = { productId: productId, quantity: quantity };
-      const result = await userService.addToCart(userId, product);
-      res.status(200).send(result);
-    } catch (error) {
-      res.status(400).send((error as Error).message);
-    }
-  }
-  async removeFromCart(req: AuthenticatedRequest, res: Response) {
-    try {
-      const { productId } = req.body;
-      const userId = req.customerId;
-      if (!productId) {
-        throw new Error('Missing required fields: id, productId');
-      }
-      const result = await userService.removeFromCart(userId, productId);
-      res.status(200).send(result);
-    } catch (error) {
-      res.status(400).send((error as Error).message);
-    }
-  }
-  async removeAllFromCart(req: AuthenticatedRequest, res: Response) {
-    try {
-      const userId = req.customerId;
-      const result = await userService.removeAllFromCart(userId);
-      res.status(200).send(result);
-    } catch (error) {
-      res.status(400).send((error as Error).message);
-    }
-  }
-  async updateCart(req: AuthenticatedRequest, res: Response) {
-    try {
-      const { productId, quantity } = req.body;
-      const userId = req.customerId;
-      if (!productId) {
-        throw new Error('Missing required fields: id, productId');
-      }
-      const product: ProductInterface = { productId: productId, quantity: quantity };
-      const result = await userService.updateCart(userId, product);
-      res.status(200).send(result);
     } catch (error) {
       res.status(400).send((error as Error).message);
     }
