@@ -1,4 +1,7 @@
-
+export interface ProductInterface {
+    productId: string;
+    quantity: number;
+}
 
 export default class Product{
     // productId: ObjectId;

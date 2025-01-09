@@ -1,3 +1,4 @@
+import { ProductInterface } from "../models/product.model";
 import supabaseClient from "./postgresql.service";
 import dotenv from 'dotenv'
 dotenv.config();
@@ -127,7 +128,93 @@ class UserService {
             throw error;
         }
     }
-    async 
+    async removeFavorite(id: string, productId: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .delete()
+                .eq('id', id)
+                .eq('favouriteList', productId);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async removeAllFromFavorites(id: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .update({ favouriteList: [] })
+                .eq('id', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getCart(id: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .select('cart')
+                .eq('id', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async addToCart(id: string, product: ProductInterface) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .update({ cart: product })
+                .eq('id', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async removeFromCart(id: string, productId: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .delete()
+                .eq('id', id)
+                .eq('cart', productId);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async removeAllFromCart(id: string) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .update({ cart: [] })
+                .eq('id', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async updateCart(id: string, product: ProductInterface) {
+        try {
+            const { data, error } = await this.instance
+                .from(this.table)
+                .update({ cart: product })
+                .eq('id', id);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+        
+    }
 }
 const userService = new UserService();
 export default userService;

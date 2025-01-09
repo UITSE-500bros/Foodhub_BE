@@ -1,14 +1,15 @@
 import { Request, Response } from 'express';
 import { userService } from '../services';
 import { AuthenticatedRequest } from 'src/middlewares/authorize';
+import { ProductInterface } from '../models/product.model';
 // import { User } from '../models';
 
 
-class userController {
+class UserController {
   async getFavorites(req: AuthenticatedRequest, res: Response) {
     try {
       const id = req.customerId;
-     
+
       const favorites = await userService.getFavorites(id);
       res.status(200).send(favorites);
     } catch (error) {
@@ -28,11 +29,34 @@ class userController {
       res.status(400).send((error as Error).message);
     }
   }
+  async removeFavorite(req: AuthenticatedRequest, res: Response) {
+    try {
+      const { productId } = req.body;
+      const userId = req.customerId;
+      if (!productId) {
+        throw new Error('Missing required fields: id, productId');
+      }
+      const result = await userService.removeFavorite(userId, productId);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+
+  async removeAllFavorites(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const result = await userService.removeAllFromFavorites(userId);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
 
   async updateProfile(req: AuthenticatedRequest, res: Response) {
     try {
       const userId = req.customerId;
-      const updateData = req.body; 
+      const updateData = req.body;
       const updatedUser = await userService.updateUserProfile(userId, updateData);
 
       // Nếu không tìm thấy user
@@ -47,7 +71,7 @@ class userController {
       return res.status(500).json({ message: "Internal server error" });
     }
   }
-  
+
 
   async loginGoogle(req: Request, res: Response) {
     try {
@@ -96,6 +120,68 @@ class userController {
       res.status(400).send((error as Error).message);
     }
   }
-}
-export default new userController();
 
+  //Cart
+  async getCart(req: AuthenticatedRequest, res: Response) {
+    try {
+      const id = req.customerId;
+      const cart = await userService.getCart(id);
+      res.status(200).send(cart);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  async addToCart(req: AuthenticatedRequest, res: Response) {
+    try {
+      const { productId , quantity } = req.body;
+      const userId = req.customerId;
+      if (!productId) {
+        throw new Error('Missing required fields: id, productId');
+      }
+      const product: ProductInterface = { productId: productId, quantity: quantity };
+      const result = await userService.addToCart(userId, product);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  async removeFromCart(req: AuthenticatedRequest, res: Response) {
+    try {
+      const { productId } = req.body;
+      const userId = req.customerId;
+      if (!productId) {
+        throw new Error('Missing required fields: id, productId');
+      }
+      const result = await userService.removeFromCart(userId, productId);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  async removeAllFromCart(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const result = await userService.removeAllFromCart(userId);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  async updateCart(req: AuthenticatedRequest, res: Response) {
+    try {
+      const { productId, quantity } = req.body;
+      const userId = req.customerId;
+      if (!productId) {
+        throw new Error('Missing required fields: id, productId');
+      }
+      const product: ProductInterface = { productId: productId, quantity: quantity };
+      const result = await userService.updateCart(userId, product);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  
+}
+export const userController = new UserController();
+export default userController;
