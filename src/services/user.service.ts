@@ -157,7 +157,7 @@ class UserService {
 
             const [sessionResult, otpResult] = await Promise.all([
                 this.instance.auth.getSession(),
-
+                this.instance.auth.setSession(),
                 this.instance.auth.sendOtp({
                     phone: phone,
                     via: 'sms',
