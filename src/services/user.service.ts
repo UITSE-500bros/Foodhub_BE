@@ -154,12 +154,19 @@ class UserService {
     }
     async verifyPhoneNumber(phone: string) {
         try {
-            const { data, error } = await this.instance.auth.updateUser({
-                phone: phone,
-                via: 'sms',
-            });
-            if (error) throw error;
-            return data;
+
+            const [sessionResult, otpResult] = await Promise.all([
+                this.instance.auth.getSession(),
+
+                this.instance.auth.sendOtp({
+                    phone: phone,
+                    via: 'sms',
+                }),
+                
+            ]);
+            if (sessionResult.error) throw sessionResult.error;
+            if (otpResult.error) throw otpResult.error;
+            return { session: sessionResult.data, otp: otpResult.data };
         } catch (error) {
             throw error;
         }
