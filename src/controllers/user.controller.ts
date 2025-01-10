@@ -120,6 +120,31 @@ class UserController {
       res.status(400).send((error as Error).message);
     }
   }
+
+  async verifyPhoneNumber(req: Request, res: Response) {
+    try {
+      const { phoneNumber } = req.body;
+      if (!phoneNumber) {
+        throw new Error('Missing required fields: phoneNumber');
+      }
+      const result = await userService.verifyPhoneNumber(phoneNumber);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  async verifyOTP(req: Request, res: Response) {
+    try {
+      const { phoneNumber, otp } = req.body;
+      if (!phoneNumber || !otp) {
+        throw new Error('Missing required fields: phoneNumber, otp');
+      }
+      const result = await userService.verifyOTP(phoneNumber, otp);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
   
 }
 export const userController = new UserController();

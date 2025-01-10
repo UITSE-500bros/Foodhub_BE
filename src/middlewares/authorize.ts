@@ -20,7 +20,6 @@ const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunc
     // Replace 'your-secret-key' with your actual JWT secret
     const decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET) ;
     req.customerId = decoded.sub as string;  // Attach user_id to request
-
     next(); // Proceed to the next middleware/controller
   } catch (error) {
     console.error('Error in authMiddleware:', error);

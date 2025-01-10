@@ -152,6 +152,35 @@ class UserService {
             throw error;
         }
     }
+    async verifyPhoneNumber(phone: string) {
+        try {
+            const { data, error } = await this.instance.auth.updateUser({
+                phone: phone,
+                via: 'sms',
+            });
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async verifyOTP(phone: string, otp: string) {
+        try {
+            const {
+                data,
+                error,
+              } = await this.instance.auth.verifyOtp({
+                phone: phone,
+                token: otp,
+                type: 'sms',
+              })
+              
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 const userService = new UserService();
