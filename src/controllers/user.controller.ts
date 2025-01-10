@@ -128,9 +128,9 @@ class UserController {
         throw new Error('Missing required fields: phoneNumber');
       }
       const result = await userService.verifyPhoneNumber(phoneNumber);
-      res.status(200).send(result);
+      return res.status(200).send(result);
     } catch (error) {
-      res.status(400).send((error as Error).message);
+      return res.status(200).send((error as Error).message);
     }
   }
   async verifyOTP(req: Request, res: Response) {
@@ -140,9 +140,9 @@ class UserController {
         throw new Error('Missing required fields: phoneNumber, otp');
       }
       const result = await userService.verifyOTP(phoneNumber, otp);
-      res.status(200).send(result);
+      return res.status(200).send(result);
     } catch (error) {
-      res.status(400).send((error as Error).message);
+      return res.status(200).send((error as Error).message);
     }
   }
   
