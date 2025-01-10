@@ -82,33 +82,6 @@ class UserService {
             throw error;
         }
     }
-    async loginWithProviderFacebook(provider: string) {
-        try {
-            console.log("Starting login with provider:", provider);
-
-            const { data, error } = await this.instance.auth.signInWithOAuth({
-                provider: provider,
-                options: {
-                    redirectTo: process.env.REDIRECT_URL,
-                },
-            });
-
-            console.log("Response data:", data);
-            if (error) {
-                console.error("OAuth error:", error.message);
-                throw error;
-            }
-
-            if (data.url) {
-                return data.url;
-            }
-
-            console.warn("No data URL returned from Supabase.");
-        } catch (error) {
-            console.error("Unexpected error:", error);
-            throw error;
-        }
-    }
     async setSession(access_token: string, refresh_token: string) {
         const { data, error } = await this.instance.auth.setSession({
             access_token,

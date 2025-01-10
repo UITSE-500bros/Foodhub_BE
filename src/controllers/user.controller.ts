@@ -82,9 +82,10 @@ class UserController {
   }
   async loginFacebook(req: Request, res: Response) {
     try {
-      await userService.loginWithProviderFacebook('facebook');
+      const data = await userService.loginWithProvider('facebook');
+      return res.status(200).json(data);
     } catch (error) {
-      res.status(400).send((error as Error).message);
+      return res.status(400).send((error as Error).message);
     }
   }
   async retrieveSession(req: Request, res: Response) {
