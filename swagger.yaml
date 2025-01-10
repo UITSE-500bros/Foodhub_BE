@@ -28,43 +28,21 @@ tags:
   - name: file
     description: File upload/download APIs
 paths:
-  /auth/google:
-    post:
+  /user/google:
+    get:
       tags:
         - auth
       summary: Login to the application
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  description: Email of the user
-                  example: ""
       responses:
         "200":
           description: Successful login
         "401":
           description: Unauthorized
-  /auth/facebook:
-    post:
+  /user/facebook:
+    get:
       tags:
         - auth
       summary: Login to the application
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  description: Email of the user
-                  example: ""
       responses:
         "200":
           description: Successful login

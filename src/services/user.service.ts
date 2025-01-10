@@ -65,13 +65,13 @@ class UserService {
     async loginWithProvider(provider: string) {
         try {
             const { data, error } = await this.instance.auth.signInWithOAuth({
-                provider: provider, // Change provider to Google
+                provider: provider,
                 options: {
-                    redirectTo: process.env.REDIRECT_URL, // The URL to redirect to after login
+                    redirectTo: process.env.REDIRECT_URL, 
                     skipBrowserRedirect: true,
                     queryParams: {
-                        prompt: "select_account", // Forces Google to show the account picker
-                        response_type: 'code', // Tells Google to return an authorization code
+                        prompt: "select_account",
+                        response_type: 'code',
                     },
                 },
             });
