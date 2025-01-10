@@ -158,11 +158,10 @@ class UserService {
             const [sessionResult, otpResult] = await Promise.all([
                 this.instance.auth.getSession(),
                 this.instance.auth.setSession(),
-                this.instance.auth.sendOtp({
+                this.instance.auth.signInWithOtp({
                     phone: phone,
-                    via: 'sms',
-                }),
-                
+                })
+
             ]);
             if (sessionResult.error) throw sessionResult.error;
             if (otpResult.error) throw otpResult.error;
@@ -176,12 +175,12 @@ class UserService {
             const {
                 data,
                 error,
-              } = await this.instance.auth.verifyOtp({
+            } = await this.instance.auth.verifyOtp({
                 phone: phone,
                 token: otp,
                 type: 'sms',
-              })
-              
+            })
+
             if (error) throw error;
             return data;
         } catch (error) {
