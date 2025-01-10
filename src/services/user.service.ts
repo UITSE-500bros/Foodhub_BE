@@ -67,7 +67,7 @@ class UserService {
             const { data, error } = await this.instance.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: process.env.REDIRECT_URL, 
+                    redirectTo: process.env.REDIRECT_URL,
                     skipBrowserRedirect: true,
                     queryParams: {
                         prompt: "select_account",
@@ -78,6 +78,23 @@ class UserService {
             if (error) throw error;
 
             return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async loginWithProviderFacebook(provider: string) {
+        try {
+            const { data, error } = await this.instance.auth.signInWithOAuth({
+                provider: provider,
+                options: {
+                    redirectTo: process.env.REDIRECT_URL,
+                },
+            });
+            if (error) throw error;
+
+            if (data.url) {
+                return data.url;
+            }
         } catch (error) {
             throw error;
         }
@@ -152,7 +169,7 @@ class UserService {
             throw error;
         }
     }
-    
+
 }
 const userService = new UserService();
 export default userService;

@@ -82,7 +82,7 @@ class UserController {
   }
   async loginFacebook(req: Request, res: Response) {
     try {
-      await userService.loginWithProvider('facebook');
+      await userService.loginWithProviderFacebook('facebook');
     } catch (error) {
       res.status(400).send((error as Error).message);
     }
