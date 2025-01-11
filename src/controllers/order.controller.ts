@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { sortObject } from '../utils';
 import { orderService } from '../services';
 import { AuthenticatedRequest } from '../middlewares/authorize';
-class orderController {
+class OrderController {
   async getOrderDetail(req: Request, res: Response) {
     const {user_id, order_id} = req.params;
     if (!user_id) {
@@ -159,7 +159,18 @@ class orderController {
       return res.status(500).json({ message: 'Internal server error', error });
     }
   }
-  
+  async shipCod(req: Request, res: Response) {
+    try {
+      const {order_id} = req.body;
+      if (!order_id) {
+        return res.status(400).json("Missing required fields: order_id");
+      }
+      const order = await orderService.shipCod(order_id);
+      return res.status(200).json(order);
+    } catch (error) {
+      return res.status(500).json((error as Error).message);
+    }
+  }
 }
-
-export default new orderController()
+const orderController = new OrderController();
+export default orderController;

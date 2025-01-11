@@ -120,6 +120,9 @@ class OrderService {
     console.log("Order status updated:", data);
     return data;
   }
+  async shipCod(order_id: string) {
+    
+  }
 }
 const orderService = new OrderService();
 export default orderService;

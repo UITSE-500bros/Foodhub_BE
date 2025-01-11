@@ -10,5 +10,6 @@ orderRouter.delete("/:id", orderController.cancelAnOrder);
 
 orderRouter.post("/createPaymentIntent", orderController.createPaymentUrl);
 orderRouter.post("/paymentCallback", orderController.getReturn);
+orderRouter.post("/cod", orderController.shipCod);
 
 export default orderRouter;
