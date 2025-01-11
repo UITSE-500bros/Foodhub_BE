@@ -27,6 +27,8 @@ tags:
     description: Cart APIs
   - name: file
     description: File upload/download APIs
+  - name: coupon
+    description: Coupon APIs
 paths:
   /user/google:
     get:
@@ -48,8 +50,6 @@ paths:
           description: Successful login
         "401":
           description: Unauthorized
-  
-  
   /product/product_detail:
     get:
       tags:
@@ -645,7 +645,116 @@ paths:
                     type: string
                     description: Error message.
                     example: "An unexpected error occurred."
-
+  /coupon:
+    get:
+      tags:
+        - coupon
+      summary: Get all coupons
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    couponId:
+                      type: string
+                      description: Unique identifier for the coupon.
+                      example: "60ad0aed9b1e8b9a2e8b9f4b"
+                    couponCode:
+                      type: string
+                      description: Coupon code for applying discounts.
+                      example: "SUMMER20"
+                    discountRate:
+                      type: number
+                      format: float
+                      description: Discount rate in percentage.
+                      example: 20
+                    validFrom:
+                      type: string
+                      format: date-time
+                      description: Start date of the coupon validity period.
+                      example: "2024-11-24T12:34:56.789Z"
+                    validUntil:
+                      type: string
+                      format: date-time
+                      description: End date of the coupon validity period.
+                      example: "2024-12-24T12:34:56.789Z"
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp when the coupon was created.
+                      example: "2024-11-24T12:34:56.789Z"
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp when the coupon was last updated.
+                      example: "2024-11-25T12:34:56.789Z"
+  /coupon/apply:
+    post:
+      tags:
+        - coupon
+      summary: Apply a coupon to the order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                couponCode:
+                  type: string
+                  description: Coupon code to apply to the order.
+                  example: "SUMMER20"
+                orderId:
+                  type: string
+                  description: Unique identifier for the order.
+                  example: "60ad0aed9b1e8b9a2e8b9f4b"
+                  
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Coupon applied successfully."
+        "400":
+          description: Invalid input or missing parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid coupon code."
+        "404":
+          description: Coupon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Coupon not found."
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unexpected error occurred."
 components:
   schemas:
     ObjectId:

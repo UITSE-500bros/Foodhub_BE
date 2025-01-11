@@ -5,6 +5,7 @@ import userRouter from "./user.route";
 import orderRouter from "./order.route";
 import cartRouter from "./cart.route";
 import bucketRouter from "./bucket.route";
+import couponRoute from "./coupon.route";
 
 const router = Router();
 
@@ -14,5 +15,7 @@ router.use('/api/user', userRouter);
 router.use('/api/order', orderRouter);
 router.use('/api/cart', cartRouter);
 router.use('/api/bucket', bucketRouter);
+router.use('/api/coupon', couponRoute);
+
 
 export default router;

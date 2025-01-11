@@ -8,7 +8,7 @@ userRouter.get("/facebook", userController.loginFacebook);
 userRouter.get("/handlecallback", userController.redirectCallback);
 userRouter.post("/refreshToken", userController.retrieveSession);
 userRouter.get("/favorites", authMiddleware,userController.getFavorites);
-userRouter.post("/phone", authMiddleware,userController.verifyPhoneNumber);
+userRouter.post("/phone",userController.verifyPhoneNumber);
 userRouter.get("/otp", authMiddleware, userController.verifyOTP);
 userRouter.post("/favorites",authMiddleware, userController.addFavorite);
 userRouter.delete("/favorites",authMiddleware, userController.removeFavorite);

@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import supabaseClient from "./postgresql.service";
+
+const client = require('twilio')(process.env.ACCOUNTSID, process.env.TWILIO_AUTH_TOKEN);
 dotenv.config();
 class UserService {
     private instance: any;
@@ -154,21 +156,16 @@ class UserService {
     }
     async verifyPhoneNumber(phone: string) {
         try {
+            client.verify.v2.services("VA08fa634a5bf592ed88c9dc2f169756e1")
+                .verifications
+                .create({ to: '+16465386464', channel: 'sms' })
+                .then(verification => console.log(verification.sid));
 
-            const [sessionResult, otpResult] = await Promise.all([
-                this.instance.auth.getSession(),
-                this.instance.auth.setSession(),
-                this.instance.auth.signInWithOtp({
-                    phone: phone,
-                })
-
-            ]);
-            if (sessionResult.error) throw sessionResult.error;
-            if (otpResult.error) throw otpResult.error;
-            return { session: sessionResult.data, otp: otpResult.data };
+            return { message: 'OTP sent' };
         } catch (error) {
             throw error;
         }
+
     }
     async verifyOTP(phone: string, otp: string) {
         try {
