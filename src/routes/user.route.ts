@@ -12,6 +12,7 @@ userRouter.post("/phone",userController.verifyPhoneNumber);
 userRouter.get("/otp", authMiddleware, userController.verifyOTP);
 userRouter.post("/favorites",authMiddleware, userController.addFavorite);
 userRouter.delete("/favorites",authMiddleware, userController.removeFavorite);
+userRouter.delete("/favorites/all",authMiddleware, userController.removeAllFromFavorites);
 userRouter.patch("/profile",authMiddleware, userController.updateProfile);
 
 export default userRouter;

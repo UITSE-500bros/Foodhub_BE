@@ -145,6 +145,15 @@ class UserController {
       return res.status(200).send((error as Error).message);
     }
   }
+  async removeAllFromFavorites(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const result = await userService.removeAllFromFavorites(userId);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
   
 }
 export const userController = new UserController();

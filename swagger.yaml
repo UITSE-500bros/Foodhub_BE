@@ -375,6 +375,32 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Product"
+    delete:
+      tags:
+        - user
+      summary: Remove a product from favorites
+      parameters:
+        - name: productId
+          in: path
+          description: ID of the product to remove from favorites
+          required: true
+          schema:
+            $ref: "#/components/schemas/ObjectId"
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /user/favourite/all:
+    delete:
+      tags:
+        - user
+      summary: Remove all products from favorites
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
   /user/refreshToken:
     post:
       tags:
@@ -713,7 +739,7 @@ paths:
                   type: string
                   description: Unique identifier for the order.
                   example: "60ad0aed9b1e8b9a2e8b9f4b"
-                  
+
       responses:
         "200":
           description: Successful operation
@@ -755,6 +781,48 @@ paths:
                   error:
                     type: string
                     example: "An unexpected error occurred."
+  /cart:
+    get:
+      tags:
+        - cart
+      summary: Get cart of an user
+      security:
+        - BearerAuth: []  
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+    post:
+      tags:
+        - cart
+      summary: Create a new cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  $ref: "#/components/schemas/ObjectId"
+                  description: Unique identifier for the user creating the cart
+                products:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Product"
+                  description: List of products in the cart
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+
+
 components:
   schemas:
     ObjectId:

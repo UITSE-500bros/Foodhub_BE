@@ -133,9 +133,10 @@ class UserService {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
-                .delete()
-                .eq('id', id)
-                .eq('favouriteList', productId);
+                .update({
+                    "favouriteList": this.instance.raw(`array_remove("favouriteList", ?)`, [productId])
+                })
+                .eq('id', id);
             if (error) throw error;
             return data;
         } catch (error) {
