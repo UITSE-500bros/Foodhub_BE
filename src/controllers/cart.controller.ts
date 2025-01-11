@@ -6,10 +6,8 @@ class CartController {
     async getCartByUserID(req: AuthenticatedRequest, res: Response) {
         try {
             const userId = req.customerId;
-            let cart = await cartService.getCartByUserID(userId);
-            if (!cart) {
-                cart = await cartService.createCartByUserID(userId);
-            }
+            const cart = await cartService.getCartByUserID(userId);
+            
             res.status(200).json(cart);
         } catch (error) {
             res.status(500).json({ message: 'Error getting cart' });

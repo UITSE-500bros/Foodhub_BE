@@ -2,7 +2,7 @@ import supabaseClient from './postgresql.service';
 
 class CartService {
     private instance: any;
-    private table = 'carts';
+    private table = 'users';
     constructor() {
         this.instance = supabaseClient.getInstance();
     }
@@ -11,8 +11,8 @@ class CartService {
     async getCartByUserID(userId: string) {
         const { data, error } = await this.instance
             .from(this.table)
-            .select('*')
-            .eq('user_id', userId);
+            .select('cart')
+            .eq('id', userId);
         if (error) {
             console.error('Error getting cart:', error);
             throw error;
@@ -22,7 +22,9 @@ class CartService {
     async addProductToCart(userId: string, productId: string, quantity: number) {
         const { data, error } = await this.instance
             .from(this.table)
-            .insert([{ user_id: userId, product_id: productId, quantity: quantity }]);
+            .update({
+                "cart": this.instance.raw(`array_append("cart", ?)`, [{ productId, quantity }])
+            })
         if (error) {
             console.error('Error adding product to cart:', error);
             throw error;
@@ -32,9 +34,15 @@ class CartService {
     async deleteProductFromCart(userId: string, productId: string) {
         const { data, error } = await this.instance
             .from(this.table)
-            .delete()
-            .eq('user_id', userId)
-            .eq('product_id', productId);
+            .update({
+                "cart": this.instance.raw(`
+                    array_remove(
+                        "cart", 
+                        (SELECT cart_item FROM jsonb_array_elements("cart") AS cart_item WHERE cart_item->>'productId' = ?)
+                    )`, [productId])
+            })
+            .eq('id', userId);
+
         if (error) {
             console.error('Error deleting product from cart:', error);
             throw error;
@@ -44,9 +52,15 @@ class CartService {
     async updateProductQuantity(userId: string, productId: string, quantity: number) {
         const { data, error } = await this.instance
             .from(this.table)
-            .update({ quantity: quantity })
-            .eq('user_id', userId)
-            .eq('product_id', productId);
+            .update({
+                "cart": this.instance.raw(`
+                    jsonb_set(
+                        "cart",
+                        '{${productId}}',
+                        to_jsonb(?)::jsonb
+                    )`, [quantity])
+            })
+            .eq('id', userId)
         if (error) {
             console.error('Error updating product quantity:', error);
             throw error;
@@ -56,26 +70,14 @@ class CartService {
     async clearCart(userId: string) {
         const { data, error } = await this.instance
             .from(this.table)
-            .delete()
-            .eq('user_id', userId);
+            .update({ cart: [] })
+            .eq('id', userId);
         if (error) {
             console.error('Error clearing cart:', error);
             throw error;
         }
         return data;
     }
-
-    async createCartByUserID(userId: string) {
-        const { data, error } = await this.instance
-            .from(this.table)
-            .insert([{ user_id: userId }]);
-        if (error) {
-            console.error('Error creating cart:', error);
-            throw error;
-        }
-        return data;
-    }
-    
 }
 const cartservice = new CartService();
 export default cartservice;
