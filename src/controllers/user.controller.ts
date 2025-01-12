@@ -56,7 +56,6 @@ class UserController {
     try {
       const userId = req.customerId;
       const updateData = req.body;
-      
       const updatedUser = await userService.updateUserProfile(userId, updateData);
 
       // Nếu không tìm thấy user

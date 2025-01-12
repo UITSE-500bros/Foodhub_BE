@@ -5,12 +5,12 @@ const client = require('twilio')(process.env.ACCOUNTSID, process.env.TWILIO_AUTH
 dotenv.config();
 
 interface UserProfile {
-    avatar: string;
+    avatar?: string;
     updated_at: string;
-    name: string;
-    email: string;
-    phoneNumber: string;
-    birthday: string;
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    birthday?: string;
 }
 
 class UserService {
@@ -38,16 +38,20 @@ class UserService {
         try {
             // Add `updated_at` explicitly
             user.updated_at = new Date().toISOString();
-
             const { data, error } = await this.instance
                 .from(this.table)
-                .update(user)
-                .eq('id', id);
-
+                .update({
+                    ...user,
+                })
+                .eq('id', id)
+                .select('id, name,avatar, email, phoneNumber, address , birthday')
+                
+            
             if (error) {
+                console.log(error);
                 throw error; // Supabase error is thrown
             }
-
+            console.log(data);
             return data;
         } catch (error) {
             throw error;
