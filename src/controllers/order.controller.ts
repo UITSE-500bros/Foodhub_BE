@@ -76,7 +76,7 @@ class OrderController {
       const returnUrl: string = process.env.VNP_RETURN_URL;
       const customerId: string = 'ab68e9b6-7c05-4f8c-83d1-d9a623950b58';
   
-      const orderId = await orderService.generateOrderId(customerId, amount, req.body.products);
+      const orderId = await orderService.generateOrderId(customerId, amount, req.body.products, req.body.delivery_address);
       const bankCode: string = req.body.bankCode;
       const locale: string = req.body.language || 'vn';
       const currCode = 'VND';

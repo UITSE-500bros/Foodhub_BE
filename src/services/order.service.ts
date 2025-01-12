@@ -41,10 +41,10 @@ class OrderService {
     return data;
   }
 
-  async generateOrderId(customerId: string, amount: number, products: any) {
+  async generateOrderId(customerId: string, amount: number, products: [] , delivery_address: string) {
     const { data, error } = await this.instance
       .from("orders")
-      .insert({ customer_id: customerId, total: amount, product_list: products })
+      .insert({ customer_id: customerId, total: amount, product_list: products, delivery_address: delivery_address })
       .select()
       .single();
 
