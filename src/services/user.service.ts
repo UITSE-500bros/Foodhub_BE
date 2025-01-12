@@ -3,6 +3,16 @@ import supabaseClient from "./postgresql.service";
 
 const client = require('twilio')(process.env.ACCOUNTSID, process.env.TWILIO_AUTH_TOKEN);
 dotenv.config();
+
+interface UserProfile {
+    avatar: string;
+    updated_at: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+    birthday: string;
+}
+
 class UserService {
     private instance: any;
     private table = 'users';
@@ -24,13 +34,20 @@ class UserService {
         }
     }
 
-    async updateUserProfile(id: string, user: any) {
+    async updateUserProfile(id: string, user: Partial<UserProfile>) {
         try {
+            // Add `updated_at` explicitly
+            user.updated_at = new Date().toISOString();
+
             const { data, error } = await this.instance
                 .from(this.table)
                 .update(user)
                 .eq('id', id);
-            if (error) throw error;
+
+            if (error) {
+                throw error; // Supabase error is thrown
+            }
+
             return data;
         } catch (error) {
             throw error;
