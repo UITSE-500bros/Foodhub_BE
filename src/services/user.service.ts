@@ -41,10 +41,26 @@ class UserService {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
-                .select('id, favouriteList')
+                .select('favouriteList')
                 .eq('id', id);
             if (error) throw error;
-            return data;
+
+            const favouriteList = data[0].favouriteList;
+
+            // Fetch details for all product IDs in favouriteList
+            const response = await Promise.all(
+                favouriteList.map(async (productId: string) => {
+                    const { data, error } = await this.instance
+                        .from('products')
+                        .select('*')
+                        .eq('id', productId)
+                        .single(); // Use .single() if each productId is unique and returns only one row
+                    if (error) throw error;
+                    return data;
+                })
+            );
+
+            return response;
         } catch (error) {
             throw error;
         }
