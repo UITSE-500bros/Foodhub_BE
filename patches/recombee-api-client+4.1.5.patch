@@ -1,0 +1,10 @@
+diff --git a/node_modules/recombee-api-client/lib/index.d.ts b/node_modules/recombee-api-client/lib/index.d.ts
+index 164924a..2709111 100644
+--- a/node_modules/recombee-api-client/lib/index.d.ts
++++ b/node_modules/recombee-api-client/lib/index.d.ts
+@@ -1,4 +1,4 @@
+-export module "recombee-api-client" {
++declare module "recombee-api-client" {
+   namespace requests {
+     /**
+      * Base class for all the requests
