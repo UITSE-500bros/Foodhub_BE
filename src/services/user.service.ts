@@ -51,13 +51,31 @@ class UserService {
     }
     async addFavorite(id: string, productId: string) {
         try {
+            // Fetch the current favouriteList of the user
+            const { data: userData, error: fetchError } = await this.instance
+                .from(this.table)
+                .select('favouriteList')
+                .eq('id', id)
+                .single(); // Use .single() to get only one result
+
+            if (fetchError) {
+                throw fetchError;
+            }
+
+            // Append the new productId to the current favouriteList
+            const updatedFavouriteList = [...userData.favouriteList, productId];
+
+            // Update the user's favouriteList with the new list
             const { data, error } = await this.instance
                 .from(this.table)
-                .insert({
-                    favouriteList: productId
+                .update({
+                    favouriteList: updatedFavouriteList
                 })
                 .eq('id', id);
-            if (error) throw error;
+
+            if (error) {
+                throw error;
+            }
             return data;
         } catch (error) {
             throw error;
@@ -131,13 +149,31 @@ class UserService {
     }
     async removeFavorite(id: string, productId: string) {
         try {
+            // Fetch the current favouriteList of the user
+            const { data: userData, error: fetchError } = await this.instance
+                .from(this.table)
+                .select('favouriteList')
+                .eq('id', id)
+                .single(); // Use .single() to get only one result
+
+            if (fetchError) {
+                throw fetchError;
+            }
+
+            // Remove the productId from the favouriteList using array_remove
+            const updatedFavouriteList = userData.favouriteList.filter(item => item !== productId);
+
+            // Update the user's favouriteList with the new list
             const { data, error } = await this.instance
                 .from(this.table)
                 .update({
-                    "favouriteList": this.instance.raw(`array_remove("favouriteList", ?)`, [productId])
+                    favouriteList: updatedFavouriteList
                 })
                 .eq('id', id);
-            if (error) throw error;
+
+            if (error) {
+                throw error;
+            }
             return data;
         } catch (error) {
             throw error;
