@@ -134,7 +134,7 @@ class UserService {
                 .select('address')
                 .eq('id', id);
             if (error) throw error;
-            return data;
+            return data[0].address;
         } catch (error) {
             throw error;
         }

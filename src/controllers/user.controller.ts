@@ -108,9 +108,9 @@ class UserController {
     }
   }
 
-  async getDeliveryAddress(req: Request, res: Response) {
+  async getDeliveryAddress(req: AuthenticatedRequest, res: Response) {
     try {
-      const { id } = req.params;
+      const id = req.customerId;
       if (!id) {
         throw new Error('Missing required fields: id');
       }
@@ -163,6 +163,29 @@ class UserController {
         return res.status(404).json({ message: "User not found" });
       }
       return res.status(200).json({user });
+    } catch (error) {
+      return res.status(400).send((error as Error).message);
+    }
+  }
+  async addDeliveryAddress(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const address = req.body;
+      const result = await userService.addDeliveryAddress(userId, address);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+  async deleteDeliveryAddress(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const addressId = req.body.addressId;
+      if (!addressId) {
+        throw new Error('Missing required fields: addressId');
+      }
+      const result = await userService.deleteDeliveryAddress(userId, addressId);
+      return res.status(200).send(result);
     } catch (error) {
       return res.status(400).send((error as Error).message);
     }
