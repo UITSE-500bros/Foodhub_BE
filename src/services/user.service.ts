@@ -127,36 +127,36 @@ class UserService {
         return data.session;
     }
 
-    async getDeliveryAddress(user_id: string) {
+    async getDeliveryAddress(id: string) {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
-                .select('delivery_address')
-                .eq('user_id', user_id);
+                .select('address')
+                .eq('id', id);
             if (error) throw error;
             return data;
         } catch (error) {
             throw error;
         }
     }
-    async addDeliveryAddress(user_id: string, address: string) {
+    async addDeliveryAddress(id: string, address: string) {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
                 .update({ delivery_address: address })
-                .eq('user_id', user_id);
+                .eq('id', id);
             if (error) throw error;
             return data;
         } catch (error) {
             throw error;
         }
     }
-    async deleteDeliveryAddress(user_id: string) {
+    async deleteDeliveryAddress(id: string) {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
                 .update({ delivery_address: null })
-                .eq('user_id', user_id);
+                .eq('id', id);
             if (error) throw error;
             return data;
         } catch (error) {
