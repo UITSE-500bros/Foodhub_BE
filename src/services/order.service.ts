@@ -120,7 +120,20 @@ class OrderService {
     console.log("Order status updated:", data);
     return data;
   }
-  async shipCod(order_id: string) {
+  async shipCod(user_id , total: number , products : any, delivery_address: string) {
+    const {data, error} = await this.instance
+            .from('orders')
+            .insert({
+                customer_id: user_id,
+                total: total,
+                product_list: products,
+                delivery_address: delivery_address
+            })
+    if(error){
+      throw (error)
+    }
+    return data;
+
     
   }
 }

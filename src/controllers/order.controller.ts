@@ -160,15 +160,12 @@ class OrderController {
     }
   }
   async shipCod(req: Request, res: Response) {
+    const { products, amount ,delivery_address} = req.body;
     try {
-      const {order_id} = req.body;
-      if (!order_id) {
-        return res.status(400).json("Missing required fields: order_id");
-      }
-      const order = await orderService.shipCod(order_id);
-      return res.status(200).json(order);
+      const orderId = await orderService.shipCod('ab68e9b6-7c05-4f8c-83d1-d9a623950b58', amount, products,delivery_address);
+      return res.status(200).json(`Order ${orderId} created successfully`);
     } catch (error) {
-      return res.status(500).json((error as Error).message);
+      return res.status(500).json(error);
     }
   }
 }
