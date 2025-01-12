@@ -18,8 +18,8 @@ class OrderController {
       return res.status(500).json((error as Error).message);
     }
   }
-  async getOrders(req: Request, res: Response) {
-    const {user_id} = req.params;
+  async getOrders(req: AuthenticatedRequest, res: Response) {
+    const user_id = req.customerId;
     if (!user_id) {
       return res.status(400).json("Missing required fields: user_id");
     }
