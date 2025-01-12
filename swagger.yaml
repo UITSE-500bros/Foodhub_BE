@@ -408,17 +408,7 @@ paths:
           description: Successful operation
         "400":
           description: Invalid input
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                product_id:
-                  type: string
-                  description: ID of the product to remove from favorites
-                  example: "60ad0aed9b1e8b9a2e8b9f4b"
+      
   /user/refreshToken:
     post:
       tags:
