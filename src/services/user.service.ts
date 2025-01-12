@@ -45,8 +45,8 @@ class UserService {
                 })
                 .eq('id', id)
                 .select('id, name,avatar, email, phoneNumber, address , birthday')
-                
-            
+
+
             if (error) {
                 console.log(error);
                 throw error; // Supabase error is thrown
@@ -160,7 +160,7 @@ class UserService {
             throw error;
         }
     }
-    async addDeliveryAddress(id: string, address: string) {
+    async addDeliveryAddress(id: string, address_name: string, address: string) {
         try {
             const addressData = await this.instance
                 .from(this.table)
@@ -168,9 +168,9 @@ class UserService {
                 .eq('id', id);
             let updatedAddress = [];
             if (!addressData) {
-                updatedAddress = [address];
+                updatedAddress = [{ address_name, address }];
             } else {
-                updatedAddress = [...addressData, address];
+                updatedAddress = [...addressData, { address_name, address }];
             }
             const { data, error } = await this.instance
                 .from(this.table)
@@ -182,19 +182,35 @@ class UserService {
             throw error;
         }
     }
-    async deleteDeliveryAddress(id: string, address: string) {
+    async deleteDeliveryAddress(id: string, address_name: string) {
         try {
-            const addressData = await this.instance
+            const { data: addressData, error: fetchError } = await this.instance
                 .from(this.table)
-                .select(address)
-                .eq('id', id);
-            const updatedAddress = addressData.filter(item => item !== address);
-            const { data, error } = await this.instance
+                .select('address')
+                .eq('id', id)
+                .single(); // Use .single() to retrieve a single row
+
+            if (fetchError) throw fetchError;
+
+            // Ensure addressData exists and extract the address field
+            if (!addressData || !addressData.address) {
+                throw new Error('Address not found for the given user ID');
+            }
+            console.log('addressData', addressData);
+            const updatedAddress = addressData.address.filter(
+                (item: { address:string, address_name: string }) => item.address_name !== address_name
+            );
+
+            // Update the database with the filtered address array
+            const { data, error: updateError } = await this.instance
                 .from(this.table)
                 .update({ address: updatedAddress })
-                .eq('id', id);
-            if (error) throw error;
-            return data;
+                .eq('id', id)
+                .select('address');
+
+            if (updateError) throw updateError;
+
+            return data[0].address;
         } catch (error) {
             throw error;
         }

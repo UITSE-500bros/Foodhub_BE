@@ -170,8 +170,8 @@ class UserController {
   async addDeliveryAddress(req: AuthenticatedRequest, res: Response) {
     try {
       const userId = req.customerId;
-      const address = req.body;
-      const result = await userService.addDeliveryAddress(userId, address);
+      const {address_name, address} = req.body;
+      const result = await userService.addDeliveryAddress(userId, address_name,address);
       res.status(200).send(result);
     } catch (error) {
       res.status(400).send((error as Error).message);
@@ -180,11 +180,11 @@ class UserController {
   async deleteDeliveryAddress(req: AuthenticatedRequest, res: Response) {
     try {
       const userId = req.customerId;
-      const addressId = req.body.addressId;
-      if (!addressId) {
+      const {address_name} = req.body;
+      if (!address_name) {
         throw new Error('Missing required fields: addressId');
       }
-      const result = await userService.deleteDeliveryAddress(userId, addressId);
+      const result = await userService.deleteDeliveryAddress(userId, address_name);
       return res.status(200).send(result);
     } catch (error) {
       return res.status(400).send((error as Error).message);
