@@ -74,9 +74,10 @@ class OrderController {
       const secretKey: string = process.env.VNP_HASH_SECRET;
       const vnpUrl: string = process.env.VNP_URL;
       const returnUrl: string = process.env.VNP_RETURN_URL;
-      const customerId: string = 'ab68e9b6-7c05-4f8c-83d1-d9a623950b58';
+      const customerId: string = req.customerId;
   
       const orderId = await orderService.generateOrderId(customerId, amount, req.body.products, req.body.delivery_address);
+      console.log('Order ID:', orderId);
       const bankCode: string = req.body.bankCode;
       const locale: string = req.body.language || 'vn';
       const currCode = 'VND';
@@ -93,20 +94,19 @@ class OrderController {
         vnp_Amount: amount * 100,
         vnp_ReturnUrl: returnUrl,
         vnp_IpAddr: ipAddr,
-        vnp_CreateDate: createDate,
-        // vnp_ExpireDate: moment(date).add(15, 'minutes').format('YYYYMMDDHHmmss'),
+        vnp_CreateDate: createDate
       };
-  
+      const expireDate = moment(date).add(15, 'minutes').format('YYYYMMDDHHmmss');
+      vnp_Params['vnp_ExpireDate'] = expireDate;
+
       if (bankCode) {
-        vnp_Params['vnp_BankCode'] = bankCode;
+        vnp_Params['vnp_BankCode'] = bankCode
       }
-  
-      const sortedParams = sortObject(vnp_Params);
-      const signData = qs.stringify(sortedParams, { encode: false });
-      const hmac = crypto.createHmac('sha512', secretKey);
-      const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
-      sortedParams['vnp_SecureHash'] = signed;
-  
+      const sortedParams = sortObject(vnp_Params)
+      const signData = qs.stringify(sortedParams, { encode: false })
+      const hmac = crypto.createHmac('sha512', secretKey)
+      const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex')
+      sortedParams['vnp_SecureHash'] = signed
       const paymentUrl = `${vnpUrl}?${qs.stringify(sortedParams, { encode: false })}`;
       return res.status(200).json(paymentUrl);
     } catch (error) {

@@ -45,11 +45,13 @@ class OrderService {
     const { data, error } = await this.instance
       .from("orders")
       .insert({ customer_id: customerId, total: amount, product_list: products, delivery_address: delivery_address })
-      .select()
+      .select('id')
       .single();
 
-    if (error) throw error;
-
+    if (error) {
+      console.error('Error creating order:', error);
+    }
+    console.log("Order created:", data);
     await Promise.all(
       products.map(async ({ product_id, quantity }) => {
         try {
