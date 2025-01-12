@@ -15,7 +15,9 @@ class OrderService {
     return data;
   }
   async getOrders(customer_id: string) {
-    const { data, error } = await this.instance.from(this.table).select('*').eq('customer_id', customer_id);
+    const { data, error } = await this.instance.from(this.table)
+          .select('id, created_at, updated_at, total, product_list, delivery_address, transaction_status, order_state')
+          .eq('customer_id', customer_id);
     if (error) {
       console.error('Error getting orders:', error);
       throw error;
