@@ -14,5 +14,5 @@ userRouter.post("/favorites",authMiddleware, userController.addFavorite);
 userRouter.delete("/favorites",authMiddleware, userController.removeFavorite);
 userRouter.delete("/favorites/all",authMiddleware, userController.removeAllFromFavorites);
 userRouter.patch("/profile",authMiddleware, userController.updateProfile);
-
+userRouter.get("/profile",authMiddleware, userController.getUserProfile);
 export default userRouter;

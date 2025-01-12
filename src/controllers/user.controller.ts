@@ -154,7 +154,20 @@ class UserController {
       res.status(400).send((error as Error).message);
     }
   }
-  
+
+  async getUserProfile(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const user = await userService.getUserProfile(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json({user });
+    } catch (error) {
+      return res.status(400).send((error as Error).message);
+    }
+  }
+
 }
 export const userController = new UserController();
 export default userController;

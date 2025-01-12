@@ -14,7 +14,7 @@ class UserService {
         try {
             const { data, error } = await this.instance
                 .from(this.table)
-                .select('*')
+                .select('id, name, email, phoneNumber, address , birthday')
                 .eq('id', id)
                 .single();
             if (error) throw error;
