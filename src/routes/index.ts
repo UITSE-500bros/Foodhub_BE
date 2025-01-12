@@ -7,6 +7,9 @@ import cartRouter from "./cart.route";
 import bucketRouter from "./bucket.route";
 import couponRoute from "./coupon.route";
 
+import { authMiddleware } from "../middlewares";
+import recommbeeController from "../controllers/recommber.controller";
+
 const router = Router();
 
 router.use('/api/product', productRouter);
@@ -16,6 +19,7 @@ router.use('/api/order', orderRouter);
 router.use('/api/cart', cartRouter);
 router.use('/api/bucket', bucketRouter);
 router.use('/api/coupon', couponRoute);
+router.use('/api/recombee', authMiddleware,recommbeeController.getRecommendations);
 
 
 export default router;
