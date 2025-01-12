@@ -120,21 +120,26 @@ class OrderService {
     console.log("Order status updated:", data);
     return data;
   }
-  async shipCod(user_id , total: number , products : any, delivery_address: string) {
-    const {data, error} = await this.instance
-            .from('orders')
-            .insert({
-                customer_id: user_id,
-                total: total,
-                product_list: products,
-                delivery_address: delivery_address
-            })
-    if(error){
+  async shipCod(user_id: string, total: number, products: any, delivery_address: string) {
+    const { data, error } = await this.instance
+      .from('orders')
+      .insert({
+        customer_id: user_id,
+        total: total,
+        product_list: products,
+        delivery_address: delivery_address
+      })
+      .single()
+      .select('id');
+
+    if (error) {
+      console.error('Error creating order:', error)
       throw (error)
     }
+    console.log('Order created:', data)
     return data;
 
-    
+
   }
 }
 const orderService = new OrderService();
