@@ -356,7 +356,7 @@ paths:
             schema:
               type: object
               properties:
-                product_id:
+                productId:
                   type: string
                   description: ID of the product to remove from favorites
                   example: "60ad0aed9b1e8b9a2e8b9f4b"
@@ -389,7 +389,7 @@ paths:
             schema:
               type: object
               properties:
-                product_id:
+                productId:
                   type: string
                   description: ID of the product to remove from favorites
                   example: "60ad0aed9b1e8b9a2e8b9f4b"
