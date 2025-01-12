@@ -7,7 +7,7 @@ userRouter.get("/google", userController.loginGoogle);
 userRouter.get("/facebook", userController.loginFacebook);
 userRouter.get("/handlecallback", userController.redirectCallback);
 userRouter.post("/refreshToken", userController.retrieveSession);
-userRouter.get("/favorites", authMiddleware,userController.getFavorites);
+userRouter.get("/favorites",authMiddleware,userController.getFavorites);
 userRouter.post("/phone",userController.verifyPhoneNumber);
 userRouter.get("/otp", authMiddleware, userController.verifyOTP);
 userRouter.post("/favorites",authMiddleware, userController.addFavorite);

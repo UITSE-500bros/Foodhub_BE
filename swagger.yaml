@@ -345,7 +345,7 @@ paths:
                     example: "An error occurred while updating the profile."
 
       
-  /user/favourite:
+  /user/favorites:
     post:
       tags:
         - user
