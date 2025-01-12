@@ -291,7 +291,7 @@ paths:
                   description: The user's address.
                   example: "123 Bến Thành, Quận 1"
       responses:
-        '200':
+        "200":
           description: Successfully updated user information.
           content:
             application/json:
@@ -304,7 +304,7 @@ paths:
                   message:
                     type: string
                     example: "User profile updated successfully."
-        '400':
+        "400":
           description: Bad request. Invalid input data.
           content:
             application/json:
@@ -317,7 +317,7 @@ paths:
                   message:
                     type: string
                     example: "Invalid input data."
-        '401':
+        "401":
           description: Unauthorized. User authentication failed.
           content:
             application/json:
@@ -330,7 +330,7 @@ paths:
                   message:
                     type: string
                     example: "Unauthorized."
-        '500':
+        "500":
           description: Internal server error.
           content:
             application/json:
@@ -344,19 +344,22 @@ paths:
                     type: string
                     example: "An error occurred while updating the profile."
 
-      
   /user/favorites:
     post:
       tags:
         - user
       summary: Add a product to favorites
-      parameters:
-        - name: productId
-          in: path
-          description: ID of the product to add to favorites
-          required: true
-          schema:
-            $ref: "#/components/schemas/ObjectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  description: ID of the product to remove from favorites
+                  example: "60ad0aed9b1e8b9a2e8b9f4b"
       responses:
         "200":
           description: Successful operation
@@ -379,13 +382,17 @@ paths:
       tags:
         - user
       summary: Remove a product from favorites
-      parameters:
-        - name: productId
-          in: path
-          description: ID of the product to remove from favorites
-          required: true
-          schema:
-            $ref: "#/components/schemas/ObjectId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  description: ID of the product to remove from favorites
+                  example: "60ad0aed9b1e8b9a2e8b9f4b"
       responses:
         "200":
           description: Successful operation
@@ -401,6 +408,17 @@ paths:
           description: Successful operation
         "400":
           description: Invalid input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  description: ID of the product to remove from favorites
+                  example: "60ad0aed9b1e8b9a2e8b9f4b"
   /user/refreshToken:
     post:
       tags:
@@ -585,7 +603,7 @@ paths:
             type: string
             example: dd8a12075ee866e9c1393156fd02379e87e9738ede29974af965bb9b3a74a5785967dad89b86527d9b2646d9f7d9dc5a23b972570fcf70eba87034b067e768fa
       responses:
-        '200':
+        "200":
           description: Payment callback processed successfully.
           content:
             application/json:
@@ -595,7 +613,7 @@ paths:
                   message:
                     type: string
                     example: Payment processed successfully.
-        '400':
+        "400":
           description: Invalid callback data.
           content:
             application/json:
@@ -787,7 +805,7 @@ paths:
         - cart
       summary: Get cart of an user
       security:
-        - BearerAuth: []  
+        - BearerAuth: []
       responses:
         "200":
           description: Successful operation
@@ -821,7 +839,6 @@ paths:
           description: Successful operation
         "400":
           description: Invalid input
-
 
 components:
   schemas:
