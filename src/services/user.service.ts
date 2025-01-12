@@ -141,9 +141,19 @@ class UserService {
     }
     async addDeliveryAddress(id: string, address: string) {
         try {
+            const addressData = await this.instance
+                .from(this.table)
+                .select(address)
+                .eq('id', id);
+            let updatedAddress = [];
+            if (!addressData) {
+                updatedAddress = [address];
+            }else {
+                updatedAddress = [...addressData, address];
+            }
             const { data, error } = await this.instance
                 .from(this.table)
-                .update({ delivery_address: address })
+                .update({ address: updatedAddress })
                 .eq('id', id);
             if (error) throw error;
             return data;
