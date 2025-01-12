@@ -74,7 +74,7 @@ class OrderController {
       const secretKey: string = process.env.VNP_HASH_SECRET;
       const vnpUrl: string = process.env.VNP_URL;
       const returnUrl: string = process.env.VNP_RETURN_URL;
-      const customerId: string = 'e343107d-e15b-482c-9430-e34395928907';
+      const customerId: string = 'ab68e9b6-7c05-4f8c-83d1-d9a623950b58';
   
       const orderId = await orderService.generateOrderId(customerId, amount, req.body.products);
       const bankCode: string = req.body.bankCode;
