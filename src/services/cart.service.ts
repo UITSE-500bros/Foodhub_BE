@@ -1,4 +1,5 @@
 import supabaseClient from './postgresql.service';
+import productService from './product.service';
 
 class CartService {
     private instance: any;
@@ -17,7 +18,13 @@ class CartService {
             console.error('Error getting cart:', error);
             throw error;
         }
-        return data;
+        const productList = await Promise.all(
+            data[0].cart.map(async (item) => {
+                console.log(item.productId);
+                return productService.getProductById(item.productId);
+            })
+        );
+        return productList.flat();
     }
     async addProductToCart(id: string, productId: string, quantity: number) {
         try {
