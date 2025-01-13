@@ -102,7 +102,11 @@ class UserController {
     if (!result) {
       return res.status(400).json({ login: 'Login failed' });
     }
-    return res.status(200).json(result);
+    return res.status(200).json({
+      message: "Token refreshed successfully",
+      access_token: result.session.access_token,
+      refresh_token: result.session.refresh_token
+    });
   }
 
   async redirectCallback(req: Request, res: Response) {
