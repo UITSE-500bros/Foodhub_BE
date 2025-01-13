@@ -825,7 +825,95 @@ paths:
           description: Successful operation
         "400":
           description: Invalid input
-
+  /review/product/{product_id}:
+    get:
+      summary: Get reviews by product ID
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the product to retrieve reviews for
+      responses:
+        '200':
+          description: Successfully retrieved reviews
+        '404':
+          description: Product not found
+  /review/customer:
+    get:
+      summary: Get reviews by customer ID
+      responses:
+        '200':
+          description: Successfully retrieved reviews
+        '401':
+          description: Unauthorized
+  /review:
+    post:
+      summary: Create a new review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  example: "02d910e0-acdf-4f71-9d6d-967f398d9c44"
+                review_rate:
+                  type: number
+                  example: 4
+                review_text:
+                  type: string
+                  example: "Great product!"
+      responses:
+        '201':
+          description: Review created successfully
+        '400':
+          description: Bad request
+    put:
+      summary: Update an existing review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  example: "60ad0aed9b1e8b9a2e8b9f4b"
+                review_rate:
+                  type: number
+                  example: 4
+                review_text:
+                  type: string
+                  example: "Great product!"
+      responses:
+        '200':
+          description: Review updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Review not found
+    delete:
+      summary: Delete a review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                review_id:
+                  type: string
+                
+      responses:
+        '200':
+          description: Review deleted successfully
+        '404':
+          description: Review not found
 components:
   schemas:
     ObjectId:

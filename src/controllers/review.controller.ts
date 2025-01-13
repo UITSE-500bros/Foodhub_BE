@@ -26,8 +26,8 @@ class ReviewController {
     async createReview(req:AuthenticatedRequest, res: Response) {
         try{
             const customer_id = req.customerId;
-            const {product_id, review_rate, review_text, review_image} = req.body;
-            const reviews = await reviewService.createReview(product_id, review_rate, review_text, review_image, customer_id);
+            const {product_id, review_rate, review_text} = req.body;
+            const reviews = await reviewService.createReview(product_id, review_rate, review_text, customer_id);
             return res.json(reviews);
         }catch(error){
             return res.status(500).json({message: (error as Error).message});
@@ -37,8 +37,8 @@ class ReviewController {
     async updateReview(req:AuthenticatedRequest, res: Response) {
         try{
             const customer_id = req.customerId;
-            const {product_id, review_rate, review_text, review_image} = req.body;
-            const reviews = await reviewService.updateReview(product_id, review_rate, review_text, review_image, customer_id);
+            const {product_id, review_rate, review_text} = req.body;
+            const reviews = await reviewService.updateReview(product_id, review_rate, review_text, customer_id);
             return res.json(reviews);
         }catch(error){
             return res.status(500).json({message: (error as Error).message});

@@ -17,14 +17,24 @@ interface Review {
 class ReviewService {
     private instance = supabaseClient.getInstance();
 
-    async createReview(product_id : string, review_rate : number, review_text : string, review_image : string, customer_id : string) {
+    async createReview(product_id : string, review_rate : number, review_text : string,  customer_id : string) {
+        const oldReview = await this.instance
+            .from('reviews')
+            .select('id')
+            .eq('product_id', product_id)
+            .eq('customer_id', customer_id);
+        if (oldReview.data && oldReview.data.length > 0) {
+            return "Review đã được tạo trước đó";
+        }
         const { data, error } = await this.instance
             .from('reviews')
-            .insert([{ product_id, review_rate, review_text, review_image, customer_id }]);
-        if (error) {
+            .insert([{ product_id, review_rate, review_text, customer_id }])
+            .select('id, product_id, customer_id, review_rate, review_text, created_at, updated_at');
+            if (error) {
+            console.log(error)
             throw error
         }
-        return data as Review[];
+        return data[0];
     }
 
     async getReviewsByProductId(product_id: string) {
@@ -75,16 +85,16 @@ class ReviewService {
         }
         return data as Review[];
     }
-    async updateReview(product_id : string, review_rate : number, review_text : string, review_image : string,id: string) {
+    async updateReview(product_id : string, review_rate : number, review_text : string, id: string) {
         const updated_at = new Date().toISOString();
         const { data, error } = await this.instance
             .from('reviews')
-            .update({ product_id, review_rate, review_text, review_image, updated_at })
-            .eq('id', id);
+            .update({ product_id, review_rate, review_text,  updated_at })
+            .eq('id', id).select('id, product_id, customer_id, review_rate, review_text, created_at, updated_at');
         if (error) {
             throw error
         }
-        return data as Review[];
+        return data[0];
     }
     async deleteReview(id: string, customer_id: string) {
         const { data, error } = await this.instance
