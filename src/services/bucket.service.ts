@@ -1,32 +1,19 @@
-import supabaseClient from "./postgresql.service";
+import supabaseClient from './postgresql.service';
 class BucketService {
-    async getBucketBanner(bucketName: string) {
-        try {
-            //const {data} = await supabaseClient.storage.getBucket(bucketName);
-            const { data, error } = await supabaseClient.getInstance()
-                .storage
-                .from('banners')
-                .list('public', {
-                    limit: 100,
-                    offset: 0,
-                })
+    private instance: any;
+    constructor() {
+        this.instance = supabaseClient.getInstance();
+    }
 
+    async getBucketBanner() {
+        try {
+            const { data, error } = await this.instance
+                .from('bannersLink')
+                .select('image_link')
             if (error) {
-                console.error('Error getting bucket banner:', error);
                 throw error;
             }
-            // Generate public URLs for all files
-            const publicUrls = data.map((file) => {
-                const { data: publicUrlData } = supabaseClient.getInstance()
-                    .storage
-                    .from(bucketName)
-                    .getPublicUrl(`public/${file.name}`);
-                return {
-                    fileName: file.name,
-                    publicUrl: publicUrlData.publicUrl,
-                };
-            });
-            return publicUrls;
+            return data;
 
         } catch (error) {
             console.error('Error getting bucket banner:', error);
