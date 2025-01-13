@@ -143,7 +143,7 @@ class UserService {
         const { data, error } = await this.instance.auth.setSession({
             access_token: accessToken, refresh_token: refreshToken
         });
-        
+
         if (error) throw error;
         return data.session;
     }
@@ -162,21 +162,27 @@ class UserService {
     }
     async addDeliveryAddress(id: string, address_name: string, address: string) {
         try {
-            const addressData = await this.instance
+            const { data: addressData, error: fetchError } = await this.instance
                 .from(this.table)
-                .select(address)
-                .eq('id', id);
+                .select('address')
+                .eq('id', id)
+                .single(); // Use .single() to fetch one record.
+
+            if (fetchError) throw fetchError;
+
             let updatedAddress = [];
-            if (!addressData) {
+            if (!addressData || !addressData.address) {
                 updatedAddress = [{ address_name, address }];
             } else {
-                updatedAddress = [...addressData, { address_name, address }];
+                updatedAddress = [...addressData.address, { address_name, address }];
             }
-            const { data, error } = await this.instance
+
+            const { data, error: updateError } = await this.instance
                 .from(this.table)
                 .update({ address: updatedAddress })
                 .eq('id', id);
-            if (error) throw error;
+
+            if (updateError) throw updateError;
             return data;
         } catch (error) {
             throw error;
