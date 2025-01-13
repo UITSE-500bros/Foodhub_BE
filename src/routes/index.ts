@@ -12,13 +12,12 @@ import recommbeeController from "../controllers/recommber.controller";
 import reviewRouter from "./review.route";
 
 const router = Router();
-
+router.use('/api/bucket', bucketRouter);
 router.use('/api/product', productRouter);
 router.use('/api/category', categoryRouter);
 router.use('/api/user', userRouter);
 router.use('/api/order', orderRouter);
 router.use('/api/cart', cartRouter);
-router.use('/api/bucket', bucketRouter);
 router.use('/api/coupon', couponRoute);
 router.use('/api/recombee', authMiddleware,recommbeeController.getRecommendations);
 router.use('/api/review', reviewRouter);
