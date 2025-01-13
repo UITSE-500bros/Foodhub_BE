@@ -37,8 +37,8 @@ class ReviewController {
     async updateReview(req:AuthenticatedRequest, res: Response) {
         try{
             const customer_id = req.customerId;
-            const {product_id, review_rate, review_text} = req.body;
-            const reviews = await reviewService.updateReview(product_id, review_rate, review_text, customer_id);
+            const {product_id, review_rate, review_text, id} = req.body;
+            const reviews = await reviewService.updateReview(product_id, review_rate, review_text, customer_id, id);
             return res.json(reviews);
         }catch(error){
             return res.status(500).json({message: (error as Error).message});

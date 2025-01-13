@@ -85,12 +85,14 @@ class ReviewService {
         }
         return data as Review[];
     }
-    async updateReview(product_id : string, review_rate : number, review_text : string, id: string) {
+    async updateReview(product_id : string, review_rate : number, review_text : string,customer_id: string, id: string) {
         const updated_at = new Date().toISOString();
         const { data, error } = await this.instance
             .from('reviews')
             .update({ product_id, review_rate, review_text,  updated_at })
-            .eq('id', id).select('id, product_id, customer_id, review_rate, review_text, created_at, updated_at');
+            .eq('id', id)
+            .eq('customer_id', customer_id)
+            .select('id, product_id, customer_id, review_rate, review_text, created_at, updated_at');
         if (error) {
             throw error
         }

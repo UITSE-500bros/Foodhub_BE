@@ -881,9 +881,12 @@ paths:
             schema:
               type: object
               properties:
+                ìd:
+                  type: string
+                  example: "6f6ab5df-0f9a-481b-a9e1-ed61e808a7fb"
                 product_id:
                   type: string
-                  example: "60ad0aed9b1e8b9a2e8b9f4b"
+                  example: "02d910e0-acdf-4f71-9d6d-967f398d9c44"
                 review_rate:
                   type: number
                   example: 4
@@ -917,8 +920,8 @@ components:
   schemas:
     ObjectId:
       type: string
-      description: A unique identifier in MongoDB (24-character hexadecimal string)
-      example: "60ad0aed9b1e8b9a2e8b9f4b"
+      description: A unique identifier in PosgreSQL (24-character hexadecimal string)
+      example: "02d910e0-acdf-4f71-9d6d-967f398d9c44"
 
     Product:
       type: object
