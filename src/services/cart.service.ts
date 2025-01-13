@@ -21,7 +21,9 @@ class CartService {
         const productList = await Promise.all(
             data[0].cart.map(async (item) => {
                 console.log(item.productId);
-                return productService.getProductById(item.productId);
+                const product = await productService.getProductById(item.productId);
+                product[0].quantity = item.quantity;
+                return product;
             })
         );
         return productList.flat();
