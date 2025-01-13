@@ -3,7 +3,7 @@ import { bucketService } from '../services';
 class BucketController {
   public async getBucket(req: Request, res: Response): Promise<Response> {
     try {
-        const bucketName = req.query.bucketName as string;
+        const bucketName = req.body;
         const result = await bucketService.getBucketBanner(bucketName);
         return res.status(200).json(result);
       
