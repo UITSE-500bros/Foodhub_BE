@@ -9,6 +9,7 @@ import couponRoute from "./coupon.route";
 
 import { authMiddleware } from "../middlewares";
 import recommbeeController from "../controllers/recommber.controller";
+import reviewRouter from "./review.route";
 
 const router = Router();
 
@@ -20,6 +21,6 @@ router.use('/api/cart', cartRouter);
 router.use('/api/bucket', bucketRouter);
 router.use('/api/coupon', couponRoute);
 router.use('/api/recombee', authMiddleware,recommbeeController.getRecommendations);
-
+router.use('/api/review', reviewRouter);
 
 export default router;
