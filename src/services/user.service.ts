@@ -215,6 +215,50 @@ class UserService {
             throw error;
         }
     }
+
+    async updateDeliveryAddress(id: string, address_name: string, address: string) {
+        try {
+            const { data: addressData, error: fetchError } = await this.instance
+                .from(this.table)
+                .select('address')
+                .eq('id', id)
+                .single(); // Use .single() to retrieve a single row
+
+            if (fetchError) throw fetchError;
+
+            // Ensure addressData exists and extract the address field
+            if (!addressData || !addressData.address) {
+                throw new Error('Address not found for the given user ID');
+            }
+
+            // Find the index of the address to be updated
+            const addressIndex = addressData.address.findIndex(
+                (item: { address: string, address_name: string }) => item.address_name === address_name
+            );
+
+            // If the address is not found, throw an error
+            if (addressIndex === -1) {
+                throw new Error('Address not found for the given address name');
+            }
+
+            // Update the address with the new address
+            addressData.address[addressIndex].address = address;
+
+            // Update the database with the new address array
+            const { data, error: updateError } = await this.instance
+                .from(this.table)
+                .update({ address: addressData.address })
+                .eq('id', id)
+                .select('address');
+
+            if (updateError) throw updateError;
+
+            return data[0].address;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async removeFavorite(id: string, productId: string) {
         try {
             // Fetch the current favouriteList of the user

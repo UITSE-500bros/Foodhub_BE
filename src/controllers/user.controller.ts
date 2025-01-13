@@ -120,18 +120,7 @@ class UserController {
     }
   }
 
-  async getDeliveryAddress(req: AuthenticatedRequest, res: Response) {
-    try {
-      const id = req.customerId;
-      if (!id) {
-        throw new Error('Missing required fields: id');
-      }
-      const address = await userService.getDeliveryAddress(id);
-      res.status(200).send(address);
-    } catch (error) {
-      res.status(400).send((error as Error).message);
-    }
-  }
+  
 
   async verifyPhoneNumber(req: Request, res: Response) {
     try {
@@ -179,6 +168,20 @@ class UserController {
       return res.status(400).send((error as Error).message);
     }
   }
+
+  async getDeliveryAddress(req: AuthenticatedRequest, res: Response) {
+    try {
+      const id = req.customerId;
+      if (!id) {
+        throw new Error('Missing required fields: id');
+      }
+      const address = await userService.getDeliveryAddress(id);
+      res.status(200).send(address);
+    } catch (error) {
+      res.status(400).send((error as Error).message);
+    }
+  }
+
   async addDeliveryAddress(req: AuthenticatedRequest, res: Response) {
     try {
       const userId = req.customerId;
@@ -197,6 +200,19 @@ class UserController {
         throw new Error('Missing required fields: addressId');
       }
       const result = await userService.deleteDeliveryAddress(userId, address_name);
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(400).send((error as Error).message);
+    }
+  }
+  async updateDeliveryAddress(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.customerId;
+      const {address_name, address} = req.body;
+      if (!address_name) {
+        throw new Error('Missing required fields: addressId');
+      }
+      const result = await userService.updateDeliveryAddress(userId, address_name, address);
       return res.status(200).send(result);
     } catch (error) {
       return res.status(400).send((error as Error).message);

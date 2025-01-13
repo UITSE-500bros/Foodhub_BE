@@ -9,9 +9,9 @@ userRouter.post("/phone",userController.verifyPhoneNumber);
 userRouter.get("/handlecallback", userController.redirectCallback);
 userRouter.post("/getToken", userController.retrieveSession);
 userRouter.post("/refreshToken", userController.refreshSession);
-
 userRouter.get("/address", authMiddleware,userController.getDeliveryAddress);
 userRouter.post("/address",authMiddleware,userController.addDeliveryAddress);
+userRouter.patch("/address",authMiddleware, userController.updateDeliveryAddress);
 userRouter.delete("/address",authMiddleware, userController.deleteDeliveryAddress);
 userRouter.get("/favorites",authMiddleware,userController.getFavorites);
 userRouter.get("/otp", authMiddleware, userController.verifyOTP);
