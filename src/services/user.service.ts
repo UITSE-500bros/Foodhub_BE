@@ -139,11 +139,11 @@ class UserService {
             throw error;
         }
     }
-    async setSession(access_token: string, refresh_token: string) {
+    async setSession(accessToken: string, refreshToken: string) {
         const { data, error } = await this.instance.auth.setSession({
-            access_token,
-            refresh_token,
+            access_token: accessToken, refresh_token: refreshToken
         });
+        
         if (error) throw error;
         return data.session;
     }
@@ -198,7 +198,7 @@ class UserService {
             }
             console.log('addressData', addressData);
             const updatedAddress = addressData.address.filter(
-                (item: { address:string, address_name: string }) => item.address_name !== address_name
+                (item: { address: string, address_name: string }) => item.address_name !== address_name
             );
 
             // Update the database with the filtered address array
@@ -283,6 +283,16 @@ class UserService {
                 type: 'sms',
             })
 
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async refreshToken(refresh_token: string) {
+        try {
+            const { data, error } = await this.instance.auth.refreshSession({ refresh_token })
             if (error) throw error;
             return data;
         } catch (error) {

@@ -7,7 +7,9 @@ userRouter.get("/google", userController.loginGoogle);
 userRouter.get("/facebook", userController.loginFacebook);
 userRouter.post("/phone",userController.verifyPhoneNumber);
 userRouter.get("/handlecallback", userController.redirectCallback);
-userRouter.post("/refreshToken", userController.retrieveSession);
+userRouter.post("/getToken", userController.retrieveSession);
+userRouter.post("/refreshToken", userController.refreshSession);
+
 userRouter.get("/address", authMiddleware,userController.getDeliveryAddress);
 userRouter.post("/address",authMiddleware,userController.addDeliveryAddress);
 userRouter.delete("/address",authMiddleware, userController.deleteDeliveryAddress);

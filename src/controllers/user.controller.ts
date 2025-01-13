@@ -96,6 +96,14 @@ class UserController {
     }
     return res.status(200).json({ login: 'Login success' });
   }
+  async refreshSession(req: Request, res: Response) {
+    const {refresh_token } = req.body;
+    const result = await userService.refreshToken(refresh_token);
+    if (!result) {
+      return res.status(400).json({ login: 'Login failed' });
+    }
+    return res.status(200).json(result);
+  }
 
   async redirectCallback(req: Request, res: Response) {
     const accessToken = req.query.access_token as string;
