@@ -41,7 +41,6 @@ class RecommbeeController {
                 }
             )
         );
-
         // Fetch details of the recommended products
         const productList = await Promise.all(
             response.recomms.map(async (item) => {
