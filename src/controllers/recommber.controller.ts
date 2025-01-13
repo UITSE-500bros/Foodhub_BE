@@ -21,7 +21,7 @@ class RecommbeeController {
             })
         );
 
-        return res.json(productList);
+        return res.json(productList.flat());
     }
     async getRecommendationsItemstoItem(req: AuthenticatedRequest, res: Response) {
         const { product_id } = req.body;
