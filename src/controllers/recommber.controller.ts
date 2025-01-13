@@ -49,7 +49,7 @@ class RecommbeeController {
             })
         );
 
-        return res.status(200).json(productList);
+        return res.status(200).json(productList.flat());
 
     }
     async getRecommendationsOnOrdersHistory(req: AuthenticatedRequest, res: Response) {
