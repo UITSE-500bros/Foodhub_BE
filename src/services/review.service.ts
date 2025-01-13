@@ -102,9 +102,10 @@ class ReviewService {
             .delete()
             .eq('id', id).eq('customer_id', customer_id);
         if (error) {
+            console.log(error)
             throw error
         }
-        return data as Review[];
+        return data;
     }
 }
 const reviewService = new ReviewService();

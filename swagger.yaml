@@ -908,7 +908,6 @@ paths:
               properties:
                 review_id:
                   type: string
-                
       responses:
         '200':
           description: Review deleted successfully
